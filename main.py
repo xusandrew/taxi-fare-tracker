@@ -18,8 +18,9 @@ driver.get(url)
 # Locate links to the webpage of each city
 links = driver.find_elements(by=By.XPATH, value='//td/a')
 
-cityLinks = {}
+countryLinks = {}
 for a in links:
-    cityLinks[a.text] = a.get_attribute("href")
+    countryLinks[a.text] = a.get_attribute("href")
+
 
 driver.quit()
