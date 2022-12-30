@@ -18,9 +18,14 @@ driver.get(url)
 # Locate links to the webpage of each city
 links = driver.find_elements(by=By.XPATH, value='//td/a')
 
+# Dictionary for the link to each country's page
 countryLinks = {}
 for a in links:
     countryLinks[a.text] = a.get_attribute("href")
+
+# Scrape each country's page
+for country in countryLinks:
+    driver.get(countryLinks[country])
 
 
 driver.quit()
