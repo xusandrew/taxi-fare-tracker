@@ -69,6 +69,7 @@ def upload(countries):
         print("Connecting to server")
         conn = psycopg2.connect(
             "dbname=taxifaretracker user=andrew password=")
+        print("Connected")
 
         cur = conn.cursor()
 
@@ -78,8 +79,8 @@ def upload(countries):
             CREATE TABLE taxifares
             (
                 id BIGSERIAL NOT NULL PRIMARY KEY,
-                country VARCHAR(30) NOT NULL,
-                city VARCHAR(30) NOT NULL,
+                country VARCHAR(50) NOT NULL,
+                city VARCHAR(50) NOT NULL,
                 taxistart NUMERIC(10, 2) NOT NULL,
                 taxiperkm NUMERIC(10, 2) NOT NULL,
                 currency VARCHAR(10) NOT NULL
@@ -109,19 +110,21 @@ def upload(countries):
                             )
 
         cur.close()
+        conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-            print('DB Conn closed.')
+            print('DB Conn closed')
 
 
 countries = scrape_countries()
-print("Scraped country data.")
+print("Scraped country data")
 
 for country in countries:
     scrape_cities(country)
-print("Scraped city data.")
+    print("Scraped cities from " + country.name)
+print("Scraped all data")
 
 upload(countries)
