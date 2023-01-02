@@ -15,6 +15,7 @@ links = list(filter(lambda link: link.get('href')[0] == 'c', links))
 # iterate through links and generate a list of countries
 countries = []
 for link in links:
-    name = link.getText()
-    country = Country(name)
+    country_name = link.getText()
+    country_url = link.get('href')
+    country = Country(country_name, country_url)
     countries.append(country)
