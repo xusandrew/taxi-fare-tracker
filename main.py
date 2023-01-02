@@ -19,3 +19,22 @@ for link in links:
     country_url = link.get('href')
     country = Country(country_name, country_url)
     countries.append(country)
+
+# iterate through countries and get city data
+for country in countries:
+    country_text = requests.get(url=country.url).text
+    country_soup = BeautifulSoup(country_text, 'html.parser')
+    cities = country_soup.find_all('tr')[2:]  # [2:] since 2 default td's
+
+    # Get data from each city
+    for city_text in cities:
+        city_soup = BeautifulSoup(str(city_text), 'html.parser')
+        rows = city_soup.find_all('td')
+
+        name = rows[0].getText()
+        taxi_start = rows[1].getText().split()[0]
+        last_row = rows[2].getText().split()
+        taxi_perkm = last_row[0]
+        currency = last_row[1]
+
+        country.add_city(City(name, taxi_start, taxi_perkm, currency))
