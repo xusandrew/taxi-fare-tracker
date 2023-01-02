@@ -35,8 +35,8 @@ def scrape_countries():
 def scrape_cities(country):
     """
         Given a country object, scrapes the name, taxi start, taxi fare per
-        km, and the currency for the country. This data is all stored in a 
-        City object, which gets appended to the cities list of the 
+        km, and the currency for the country. This data is all stored in a
+        City object, which gets appended to the cities list of the
         country's object
     """
 
@@ -58,7 +58,7 @@ def scrape_cities(country):
         country.add_city(City(name, taxi_start, taxi_perkm, currency))
 
 
-def upload():
+def upload(countries):
     """
         Uploads data to the postgresql database
     """
@@ -66,13 +66,47 @@ def upload():
     conn = None
     try:
         # connect to the PostgreSQL server
+        print("Connecting to server")
         conn = psycopg2.connect(
             "dbname=taxifaretracker user=andrew password=")
 
         cur = conn.cursor()
 
-        query = 0
-        cur.execute()
+        # reset table
+        cur.execute("DROP TABLE taxifares;")
+        cur.execute("""
+            CREATE TABLE taxifares
+            (
+                id BIGSERIAL NOT NULL PRIMARY KEY,
+                country VARCHAR(30) NOT NULL,
+                city VARCHAR(30) NOT NULL,
+                taxistart NUMERIC(10, 2) NOT NULL,
+                taxiperkm NUMERIC(10, 2) NOT NULL,
+                currency VARCHAR(10) NOT NULL
+            );
+        """)
+
+        for country in countries:
+            for city in country.cities:
+                cur.execute("""
+                    INSERT INTO taxifares 
+                    (
+                        country, 
+                        city, 
+                        taxistart, 
+                        taxiperkm, 
+                        currency
+                    )
+                    VALUES (%s, %s, %s, %s, %s);
+                    """,
+                            (
+                                country.name,
+                                city.name,
+                                city.taxi_start,
+                                city.taxi_perkm,
+                                city.currency
+                            )
+                            )
 
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
@@ -86,3 +120,4 @@ def upload():
 countries = scrape_countries()
 for country in countries:
     scrape_cities(country)
+upload(countries)
