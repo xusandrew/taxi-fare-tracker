@@ -29,6 +29,7 @@ def scrape_countries():
         country = Country(country_name, country_url)
         countries.append(country)
 
+    print("Scraped country data.")
     return countries
 
 
@@ -56,6 +57,8 @@ def scrape_cities(country):
         currency = last_row[1]
 
         country.add_city(City(name, taxi_start, taxi_perkm, currency))
+
+    print("Scraped city data.")
 
 
 def upload(countries):
