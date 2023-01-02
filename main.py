@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import psycopg2
 from City import City
 from Country import Country
 
@@ -38,3 +39,23 @@ for country in countries:
         currency = last_row[1]
 
         country.add_city(City(name, taxi_start, taxi_perkm, currency))
+
+# put data in database
+conn = None
+try:
+    # connect to the PostgreSQL server
+    conn = psycopg2.connect(
+        "dbname=taxifaretracker user=andrew password=")
+
+    cur = conn.cursor()
+
+    query = 0
+    cur.execute()
+
+    cur.close()
+except (Exception, psycopg2.DatabaseError) as error:
+    print(error)
+finally:
+    if conn is not None:
+        conn.close()
+        print('DB Conn closed.')
