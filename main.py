@@ -1,31 +1,12 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
+import requests
+from bs4 import BeautifulSoup
 
-# Options to change to headless mode in future
-options = Options()
-# options.headless = True
-# options.add_argument("--window-size=1920,1200")
-
-# Start webdriver and get main webpage
-driver = webdriver.Chrome(options=options, service=Service(
-    ChromeDriverManager().install()))
+# get HTML from page
 url = "https://www.numbeo.com/taxi-fare/"
-driver.get(url)
+text = requests.get(url=url).text
 
-# Locate links to the webpage of each city
-links = driver.find_elements(by=By.XPATH, value='//td/a')
-
-# Dictionary for the link to each country's page
-countryLinks = {}
-for a in links:
-    countryLinks[a.text] = a.get_attribute("href")
-
-# Scrape each country's page
-for country in countryLinks:
-    driver.get(countryLinks[country])
-
-
-driver.quit()
+# get links to the webpage of each city
+soup = BeautifulSoup(text, 'html.parser')
+links = soup.find_all('a')
+links = map(lambda a: a.get('href'), links)
+links = list(filter(lambda link: link[0] == 'c', links))
