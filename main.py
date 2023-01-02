@@ -4,25 +4,42 @@ import psycopg2
 from City import City
 from Country import Country
 
-# get HTML from page
-url = "https://www.numbeo.com/taxi-fare/"
-text = requests.get(url=url).text
 
-# get links to the webpage of each city
-soup = BeautifulSoup(text, 'html.parser')
-links = soup.find_all('a')
-links = list(filter(lambda link: link.get('href')[0] == 'c', links))
+def scrape_countries():
+    """
+        Scrapes the main page for a list of every country available. Then
+        creates an object for each country, and returns a list of all
+        objects.
+    """
 
-# iterate through links and generate a list of countries
-countries = []
-for link in links:
-    country_name = link.getText()
-    country_url = link.get('href')
-    country = Country(country_name, country_url)
-    countries.append(country)
+    # get HTML from page
+    url = "https://www.numbeo.com/taxi-fare/"
+    text = requests.get(url=url).text
 
-# iterate through countries and get city data
-for country in countries:
+    # get links to the webpage of each city
+    soup = BeautifulSoup(text, 'html.parser')
+    links = soup.find_all('a')
+    links = list(filter(lambda link: link.get('href')[0] == 'c', links))
+
+    # iterate through links and generate a list of countries
+    countries = []
+    for link in links:
+        country_name = link.getText()
+        country_url = link.get('href')
+        country = Country(country_name, country_url)
+        countries.append(country)
+
+    return countries
+
+
+def scrape_cities(country):
+    """
+        Given a country object, scrapes the name, taxi start, taxi fare per
+        km, and the currency for the country. This data is all stored in a 
+        City object, which gets appended to the cities list of the 
+        country's object
+    """
+
     country_text = requests.get(url=country.url).text
     country_soup = BeautifulSoup(country_text, 'html.parser')
     cities = country_soup.find_all('tr')[2:]  # [2:] since 2 default td's
@@ -40,22 +57,32 @@ for country in countries:
 
         country.add_city(City(name, taxi_start, taxi_perkm, currency))
 
-# put data in database
-conn = None
-try:
-    # connect to the PostgreSQL server
-    conn = psycopg2.connect(
-        "dbname=taxifaretracker user=andrew password=")
 
-    cur = conn.cursor()
+def upload():
+    """
+        Uploads data to the postgresql database
+    """
 
-    query = 0
-    cur.execute()
+    conn = None
+    try:
+        # connect to the PostgreSQL server
+        conn = psycopg2.connect(
+            "dbname=taxifaretracker user=andrew password=")
 
-    cur.close()
-except (Exception, psycopg2.DatabaseError) as error:
-    print(error)
-finally:
-    if conn is not None:
-        conn.close()
-        print('DB Conn closed.')
+        cur = conn.cursor()
+
+        query = 0
+        cur.execute()
+
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print('DB Conn closed.')
+
+
+countries = scrape_countries()
+for country in countries:
+    scrape_cities(country)
