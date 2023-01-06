@@ -68,7 +68,7 @@ def upload(countries):
         # connect to the PostgreSQL server
         print("Connecting to server")
         conn = psycopg2.connect(
-            "dbname=taxifaretracker user=andrew password=")
+            database="taxifares", user="docker", password="docker", host="0.0.0.0")
         print("Connected")
 
         cur = conn.cursor()
@@ -119,12 +119,13 @@ def upload(countries):
             print('DB Conn closed')
 
 
-countries = scrape_countries()
-print("Scraped country data")
+def run_scrape():
+    countries = scrape_countries()
+    print("Scraped country data")
 
-for country in countries:
-    scrape_cities(country)
-    print("Scraped cities from " + country.name)
-print("Scraped all data")
+    for country in countries:
+        scrape_cities(country)
+        print("Scraped cities from " + country.name)
+    print("Scraped all data")
 
-upload(countries)
+    upload(countries)

@@ -1,10 +1,12 @@
 from flask import Flask
+from main import run_scrape
 server = Flask(__name__)
 
 
 @server.route("/")
 def hello():
-    return "Hello World!"
+    run_scrape()
+    return "Hi!"
 
 
 if __name__ == "__main__":
