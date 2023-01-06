@@ -4,4 +4,3 @@ extra.py
 __pycache__
 __pycache__/City.cpython-310.pyc
 __pycache__/Country.cpython-310.pyc
-docker-compose.yml
