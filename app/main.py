@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
-from City import City
-from Country import Country
+from app.City import City
+from app.Country import Country
 
 
 def scrape_countries():
