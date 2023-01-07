@@ -12,7 +12,7 @@ app.get('/:city', async (req, res) => {
         const data = await pool.query(
             `SELECT * FROM taxifares WHERE city = '${city}';`
         )
-        res.json(data.rows)
+        res.json(data.rows[0])
     } catch (err) {
         console.error(err.message)
     }
