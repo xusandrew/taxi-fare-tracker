@@ -1,5 +1,5 @@
 .gitignore
-connect.py
+node_modules
 extra.py
 __pycache__
 __pycache__/City.cpython-310.pyc
