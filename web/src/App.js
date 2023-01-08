@@ -1,8 +1,15 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import './App.css'
 
+// Components
+import Input from './components/Input'
+
 function App() {
-  return <Fragment></Fragment>
+  return (
+    <>
+      <Input />
+    </>
+  )
 }
 
 export default App
