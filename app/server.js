@@ -8,7 +8,10 @@ app.use(express.json())
 
 app.get('/countries/:country', async (req, res) => {
   try {
-    const { country } = req.params
+    let { country } = req.params
+
+    country = country.toLowerCase()
+    country = country.charAt(0).toUpperCase() + country.slice(1)
 
     country = country.toLowerCase()
     country = country.charAt(0).toUpperCase() + country.slice(1)
