@@ -6,6 +6,7 @@ const Input = () => {
   const [distance, setDistance] = useState('')
 
   const [countryChoices, setCountryChoices] = useState([])
+  // const [cityChoices, setCityChoices] = useState([])
 
   const searchCountries = async val => {
     try {
@@ -15,6 +16,25 @@ const Input = () => {
       response = await response.json()
       response = response.map(res => res['country'])
       setCountryChoices(response)
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
+  const searchCitys = async val => {
+    try {
+      if (!val) val = 'empty'
+
+      let fetch_url = `http://localhost:5000/city?city=${val}`
+
+      if (countryChoices.includes(country)) {
+        fetch_url += `&country=${country}`
+      }
+      console.log(fetch_url)
+      let response = await fetch(fetch_url)
+      response = await response.json()
+      response = response.map(res => res['city'])
+      console.log(response)
     } catch (err) {
       console.error(err.message)
     }
@@ -50,7 +70,10 @@ const Input = () => {
           type='text'
           list='cities'
           value={city}
-          onChange={e => setCity(e.target.value)}
+          onChange={e => {
+            setCity(e.target.value)
+            searchCitys(e.target.value)
+          }}
         />
 
         <label>Distance(km)</label>

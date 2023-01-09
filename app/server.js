@@ -14,7 +14,7 @@ app.get('/countries/:country', async (req, res) => {
     country = country.charAt(0).toUpperCase() + country.slice(1)
 
     let query
-    if (country === 'empty') {
+    if (country === 'Empty') {
       query = `SELECT DISTINCT country FROM taxifares ORDER BY country;`
     } else {
       query = `SELECT DISTINCT country FROM taxifares WHERE country LIKE '${country}%' ORDER BY country;`
@@ -27,13 +27,36 @@ app.get('/countries/:country', async (req, res) => {
   }
 })
 
-app.get('/city/:city', async (req, res) => {
+app.get('/city', async (req, res) => {
   try {
-    const { city } = req.params
-    const data = await pool.query(
-      `SELECT * FROM taxifares WHERE city = '${city}';`
-    )
-    res.json(data.rows[0])
+    let city = req.query.city
+    city = city.toLowerCase()
+    city = city.charAt(0).toUpperCase() + city.slice(1)
+
+    let country = null
+    if (req.query.country) {
+      country = req.query.country
+      country = country.toLowerCase()
+      country = country.charAt(0).toUpperCase() + country.slice(1)
+    }
+
+    let query
+    if (city === 'Empty') {
+      if (country) {
+        query = `SELECT country, city FROM taxifares WHERE country = '${country}'ORDER BY city;`
+      } else {
+        query = `SELECT country, city FROM taxifares ORDER BY city;`
+      }
+    } else {
+      if (country) {
+        query = `SELECT country, city FROM taxifares WHERE country = '${country}' AND city LIKE '${city}%' ORDER BY city;`
+      } else {
+        query = `SELECT country, city FROM taxifares WHERE city LIKE '${city}%' ORDER BY city;`
+      }
+    }
+
+    const data = await pool.query(query)
+    res.json(data.rows)
   } catch (err) {
     console.error(err.message)
   }
