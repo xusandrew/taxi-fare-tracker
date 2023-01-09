@@ -13,9 +13,6 @@ app.get('/countries/:country', async (req, res) => {
     country = country.toLowerCase()
     country = country.charAt(0).toUpperCase() + country.slice(1)
 
-    country = country.toLowerCase()
-    country = country.charAt(0).toUpperCase() + country.slice(1)
-
     let query
     if (country === 'empty') {
       query = `SELECT DISTINCT country FROM taxifares ORDER BY country;`
