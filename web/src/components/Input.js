@@ -8,11 +8,13 @@ const Input = () => {
   const [countryChoices, setCountryChoices] = useState([])
   const [cityChoices, setCityChoices] = useState([])
 
-  const searchCountries = async val => {
+  const searchCountries = async country_val => {
     try {
-      if (!val) val = 'empty'
+      if (!country_val) country_val = 'empty'
 
-      let response = await fetch(`http://localhost:5000/countries/${val}`)
+      let response = await fetch(
+        `http://localhost:5000/countries/${country_val}`
+      )
       response = await response.json()
       response = response.map(res => res['country'])
       setCountryChoices(response)
@@ -21,15 +23,16 @@ const Input = () => {
     }
   }
 
-  const searchCitys = async val => {
+  const searchCitys = async (city_val, country_val) => {
     try {
-      if (!val) val = 'empty'
+      if (!city_val) city_val = 'empty'
 
-      let fetch_url = `http://localhost:5000/city?city=${val}`
+      let fetch_url = `http://localhost:5000/city?city=${city_val}`
 
-      if (countryChoices.includes(country)) {
-        fetch_url += `&country=${country}`
+      if (countryChoices.includes(country_val)) {
+        fetch_url += `&country=${country_val}`
       }
+
       let response = await fetch(fetch_url)
       response = await response.json()
       response = response.map(res => res['city'])
@@ -68,7 +71,7 @@ const Input = () => {
           onChange={e => {
             setCountry(e.target.value)
             searchCountries(e.target.value)
-            searchCitys()
+            searchCitys(null, e.target.value)
           }}
         />
 
