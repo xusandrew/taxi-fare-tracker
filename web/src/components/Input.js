@@ -1,22 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Input = () => {
+  const [country, setCountry] = useState('')
+  const [city, setCity] = useState('')
+  const [distance, setDistance] = useState('')
+
   return (
     <>
-      <datalist id='countries'>
-        <option>Volvo</option>
-      </datalist>
+      <datalist id='countries'>{/* <option>Volvo</option> */}</datalist>
 
       <h1>Taxi Fares</h1>
       <form>
-        <label for='country'>Country:</label>
-        <input type='text' list='countries' id='country' name='country' />
+        <label>Country:</label>
+        <input
+          type='text'
+          list='countries'
+          value={country}
+          onChange={e => setCountry(e.target.value)}
+        />
 
-        <label for='city'>City:</label>
-        <input type='text' list='cities' id='city' name='city' />
+        <label>City:</label>
+        <input
+          type='text'
+          list='cities'
+          value={city}
+          onChange={e => setCity(e.target.value)}
+        />
 
-        <label for='distance'>Distance(km)</label>
-        <input type='number' id='distance' name='distance' />
+        <label>Distance(km)</label>
+        <input
+          type='number'
+          value={distance}
+          onChange={e => setDistance(e.target.value)}
+        />
 
         <button type='submit'>Submit</button>
       </form>
