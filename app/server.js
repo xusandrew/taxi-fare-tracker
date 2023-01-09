@@ -6,13 +6,13 @@ const pool = require('./db')
 app.use(cors())
 app.use(express.json())
 
-app.get('/countries/:text', async (req, res) => {
+app.get('/countries/:country', async (req, res) => {
   try {
-    const { text } = req.params
+    const { country } = req.params
     const data = await pool.query(
-      `SELECT * FROM taxifares WHERE country LIKE '${text}%';`
+      `SELECT DISTINCT country FROM taxifares WHERE country LIKE '${country}%';`
     )
-    res.json(data.rows[0])
+    res.json(data.rows)
   } catch (err) {
     console.error(err.message)
   }
