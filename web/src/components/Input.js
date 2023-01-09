@@ -5,9 +5,28 @@ const Input = () => {
   const [city, setCity] = useState('')
   const [distance, setDistance] = useState('')
 
+  const [countryChoices, setCountryChoices] = useState([])
+
+  const searchCounties = async val => {
+    try {
+      if (!val) val = 'empty'
+
+      let response = await fetch(`http://localhost:5000/countries/${val}`)
+      response = await response.json()
+      response = response.map(res => res['country'])
+      setCountryChoices(response)
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
   return (
     <>
-      <datalist id='countries'>{/* <option>Volvo</option> */}</datalist>
+      <datalist id='countries'>
+        {countryChoices.map(country => (
+          <option key={country}>{country}</option>
+        ))}
+      </datalist>
 
       <h1>Taxi Fares</h1>
       <form>
@@ -16,7 +35,10 @@ const Input = () => {
           type='text'
           list='countries'
           value={country}
-          onChange={e => setCountry(e.target.value)}
+          onChange={e => {
+            setCountry(e.target.value)
+            searchCounties(e.target.value)
+          }}
         />
 
         <label>City:</label>
