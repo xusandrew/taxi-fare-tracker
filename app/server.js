@@ -9,9 +9,15 @@ app.use(express.json())
 app.get('/countries/:country', async (req, res) => {
   try {
     const { country } = req.params
-    const data = await pool.query(
-      `SELECT DISTINCT country FROM taxifares WHERE country LIKE '${country}%';`
-    )
+
+    let query
+    if (country === 'empty') {
+      query = `SELECT DISTINCT country FROM taxifares ORDER BY country;`
+    } else {
+      query = `SELECT DISTINCT country FROM taxifares WHERE country LIKE '${country}%' ORDER BY country;`
+    }
+
+    const data = await pool.query(query)
     res.json(data.rows)
   } catch (err) {
     console.error(err.message)
