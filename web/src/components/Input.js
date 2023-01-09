@@ -6,7 +6,7 @@ const Input = () => {
   const [distance, setDistance] = useState('')
 
   const [countryChoices, setCountryChoices] = useState([])
-  // const [cityChoices, setCityChoices] = useState([])
+  const [cityChoices, setCityChoices] = useState([])
 
   const searchCountries = async val => {
     try {
@@ -30,11 +30,10 @@ const Input = () => {
       if (countryChoices.includes(country)) {
         fetch_url += `&country=${country}`
       }
-      console.log(fetch_url)
       let response = await fetch(fetch_url)
       response = await response.json()
       response = response.map(res => res['city'])
-      console.log(response)
+      setCityChoices(response)
     } catch (err) {
       console.error(err.message)
     }
@@ -42,13 +41,20 @@ const Input = () => {
 
   useEffect(() => {
     searchCountries()
+    searchCitys()
   }, [])
 
   return (
     <>
       <datalist id='countries'>
-        {countryChoices.map(country => (
+        {countryChoices.map((country, i) => (
           <option key={country}>{country}</option>
+        ))}
+      </datalist>
+
+      <datalist id='cities'>
+        {cityChoices.map((city, i) => (
+          <option key={i}>{city}</option>
         ))}
       </datalist>
 
@@ -62,6 +68,7 @@ const Input = () => {
           onChange={e => {
             setCountry(e.target.value)
             searchCountries(e.target.value)
+            searchCitys()
           }}
         />
 
