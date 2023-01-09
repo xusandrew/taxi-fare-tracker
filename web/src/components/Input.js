@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Input = () => {
   const [country, setCountry] = useState('')
@@ -7,7 +7,7 @@ const Input = () => {
 
   const [countryChoices, setCountryChoices] = useState([])
 
-  const searchCounties = async val => {
+  const searchCountries = async val => {
     try {
       if (!val) val = 'empty'
 
@@ -19,6 +19,10 @@ const Input = () => {
       console.error(err.message)
     }
   }
+
+  useEffect(() => {
+    searchCountries()
+  }, [])
 
   return (
     <>
@@ -37,7 +41,7 @@ const Input = () => {
           value={country}
           onChange={e => {
             setCountry(e.target.value)
-            searchCounties(e.target.value)
+            searchCountries(e.target.value)
           }}
         />
 
