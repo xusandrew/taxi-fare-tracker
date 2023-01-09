@@ -62,6 +62,31 @@ app.get('/city', async (req, res) => {
   }
 })
 
+app.get('/submit', async (req, res) => {
+  try {
+    let city = req.query.city
+    city = city.toLowerCase()
+    city = city.charAt(0).toUpperCase() + city.slice(1)
+
+    let country = req.query.country
+    country = country.toLowerCase()
+    country = country.charAt(0).toUpperCase() + country.slice(1)
+
+    let distance = req.query.distance
+
+    let query = `SELECT * FROM taxifares WHERE country='${country}' AND city='${city}';`
+    let data = await pool.query(query)
+    data = data.rows[0]
+
+    const price =
+      parseFloat(data['taxistart']) + distance * parseFloat(data['taxiperkm'])
+
+    res.json(price)
+  } catch (err) {
+    console.error(err.message)
+  }
+})
+
 app.listen(5000, () => {
   console.log('Server has started on port 5000')
 })

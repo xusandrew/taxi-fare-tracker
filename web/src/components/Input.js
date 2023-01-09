@@ -42,9 +42,27 @@ const Input = () => {
     }
   }
 
+  const onSubmit = async e => {
+    e.preventDefault()
+    try {
+      console.log(
+        `http://localhost:5000/submit?country=${country}&city=${city}&distance=${distance}`
+      )
+      let response = await fetch(
+        `http://localhost:5000/submit?country=${country}&city=${city}&distance=${distance}`
+      )
+      response = await response.json()
+
+      console.log(response)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   useEffect(() => {
     searchCountries()
     searchCitys()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -62,7 +80,7 @@ const Input = () => {
       </datalist>
 
       <h1>Taxi Fares</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <label>Country:</label>
         <input
           type='text'
