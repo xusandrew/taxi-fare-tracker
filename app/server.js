@@ -78,10 +78,15 @@ app.get('/submit', async (req, res) => {
     let data = await pool.query(query)
     data = data.rows[0]
 
+    if (!data) {
+      res.json('')
+    }
+
     const price =
       parseFloat(data['taxistart']) + distance * parseFloat(data['taxiperkm'])
 
-    res.json(price)
+    data['price'] = price
+    res.json(data)
   } catch (err) {
     console.error(err.message)
   }
