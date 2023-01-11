@@ -63,7 +63,14 @@ def find_prices():
 
 
 def get_db_queries(city, data):
-    pass
+    '''Return query to update values in database with values in data'''
+
+    output = []
+    output.append(
+        f"UPDATE uberfares SET airportToCenter={data['airport_to_center']} WHERE city='{city}';")
+    output.append(
+        f"UPDATE uberfares SET centerToAirport={data['center_to_airport']} WHERE city='{city}';")
+    return output
 
 
 def upload(data):
@@ -81,7 +88,8 @@ def upload(data):
 
         # commands
         for city in data:
-            get_db_queries(city, data[city])
+            for query in get_db_queries(city, data[city]):
+                cur.execute(query)
 
         cur.close()
         conn.commit()
@@ -94,5 +102,5 @@ def upload(data):
 
 
 airport_center_data = find_prices()
-# upload()
+upload(airport_center_data)
 driver.quit()
