@@ -15,6 +15,11 @@ driver = webdriver.Chrome(service=ChromeService(
 
 
 def scrape_coords(o_lat, o_long, d_lat, d_long):
+    '''Takes in coordinates of the origin and destination and requests
+    and generates a link to request to the lyft website. Then takes
+    result from the request and returns the price
+    '''
+
     url = f'https://ride.lyft.com/ridetype?origin={o_lat}%2C{o_long}&destination={d_lat}%2C{d_long}&ride_type=&offerProductId=standard'
     driver.get(url)
 
@@ -29,6 +34,10 @@ def scrape_coords(o_lat, o_long, d_lat, d_long):
 
 
 def find_prices(data):
+    '''Loops through each city and determines the prices from the airport
+    to city-center and vice versa.
+    '''
+
     output = {}
     for city_name in data:
         coords = data[city_name]
