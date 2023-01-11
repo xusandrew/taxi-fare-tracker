@@ -1,9 +1,9 @@
 data = {
     'Toronto': {
-        'airport-lat': 43.68844223022461,
-        'airport-long': -79.62175750732422,
-        'center-lat': 43.64793014526367,
-        'center-long': -79.38478088378906
+        'airport-lat': 43.688442230,
+        'airport-long': -79.62175750,
+        'center-lat': 43.64793014,
+        'center-long': -79.38478088
     },
 
     'Vancouver': {
