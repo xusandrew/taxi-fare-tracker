@@ -7,13 +7,51 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 import psycopg2
 
-from data import get_data
-
 # start up selenium
 options = Options()
 options.headless = True
 driver = webdriver.Chrome(service=ChromeService(
     ChromeDriverManager().install()), options=options)
+
+
+def get_data():
+    '''Get data about cities from database'''
+    results = []
+
+    conn = None
+    try:
+        # connect to the PostgreSQL server
+        print("Connecting to server")
+        conn = psycopg2.connect(
+            database="taxifaretracker", user="andrew", password="")
+        print("Connected")
+
+        cur = conn.cursor()
+
+        # commands
+        query = "SELECT city, airportLat, airportLong, centerLat, centerLong FROM lyftfares;"
+        cur.execute(query)
+
+        results = cur.fetchall()
+
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print('DB Conn closed')
+
+    output = {}
+    for row in results:
+        output[row[0]] = {
+            'airport-lat': row[1],
+            'airport-long': row[2],
+            'center-lat': row[3],
+            'center-long': row[4]
+        }
+
+    return output
 
 
 def scrape_coords(o_lat, o_long, d_lat, d_long):
