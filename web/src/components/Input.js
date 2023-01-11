@@ -70,7 +70,6 @@ const Input = () => {
         ))}
       </datalist>
 
-      <h1>Taxi Fares</h1>
       <form onSubmit={onSubmit}>
         <label>Country:</label>
         <input
