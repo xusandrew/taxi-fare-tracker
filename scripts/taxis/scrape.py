@@ -68,24 +68,10 @@ def upload(countries):
         # connect to the PostgreSQL server
         print("Connecting to server")
         conn = psycopg2.connect(
-            database="taxifares", user="docker", password="docker", host="0.0.0.0")
+            database="taxifaretracker", user="andrew", password="")
         print("Connected")
 
         cur = conn.cursor()
-
-        # reset table
-        cur.execute("DROP TABLE taxifares;")
-        cur.execute("""
-            CREATE TABLE taxifares
-            (
-                id BIGSERIAL NOT NULL PRIMARY KEY,
-                country VARCHAR(50) NOT NULL,
-                city VARCHAR(50) NOT NULL,
-                taxistart NUMERIC(10, 2) NOT NULL,
-                taxiperkm NUMERIC(10, 2) NOT NULL,
-                currency VARCHAR(10) NOT NULL
-            );
-        """)
 
         for country in countries:
             for city in country.cities:
@@ -105,7 +91,7 @@ def upload(countries):
                                 city.name,
                                 city.taxi_start,
                                 city.taxi_perkm,
-                                city.currency
+                                city.currency,
                             )
                             )
 
@@ -129,3 +115,6 @@ def run_scrape():
     print("Scraped all data")
 
     upload(countries)
+
+
+run_scrape()
