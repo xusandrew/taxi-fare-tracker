@@ -86,10 +86,10 @@ def find_prices(data):
     '''
 
     output = {}
-    for city_name in data:
-        values = data[city_name]
-        airport_to_center = scrape_links(values['airport'], values['center'])
-        center_to_airport = scrape_links(values['center'], values['airport'])
+    for (city_name, coords) in data.items():
+        coords = data[city_name]
+        airport_to_center = scrape_links(coords['airport'], coords['center'])
+        center_to_airport = scrape_links(coords['center'], coords['airport'])
 
         output[city_name] = {
             'airport_to_center': airport_to_center,
@@ -98,15 +98,25 @@ def find_prices(data):
     return output
 
 
-def get_db_queries(city, data):
+def get_db_query(city, city_data, route_data):
     '''Return query to update values in database with values in data'''
 
-    output = []
-    output.append(
-        f"UPDATE uberfares SET airportToCenter={data['airport_to_center']} WHERE city='{city}';")
-    output.append(
-        f"UPDATE uberfares SET centerToAirport={data['center_to_airport']} WHERE city='{city}';")
-    return output
+    return ("""
+        INSERT INTO uberfares 
+        (
+            city, 
+            airport, 
+            center, 
+            airporttocenter,
+            centertoairport
+        )
+        VALUES ('{}','{}','{}',{},{});
+        """.format(city,
+                   city_data['airport'],
+                   city_data['center'],
+                   route_data['airport_to_center'],
+                   route_data['center_to_airport']
+                   ))
 
 
 def upload(data):
@@ -124,8 +134,9 @@ def upload(data):
 
         # commands
         for city_name in data:
-            for query in get_db_queries(city_name, data[city_name]):
-                cur.execute(query)
+            query = get_db_query(
+                city_name, city_data[city_name], route_data[city_name])
+            cur.execute(query)
 
         cur.close()
         conn.commit()
@@ -137,6 +148,7 @@ def upload(data):
             print('DB Conn closed')
 
 
-airport_center_data = find_prices(get_data())
-upload(airport_center_data)
+city_data = get_data()
+route_data = find_prices(city_data)
+upload(route_data)
 driver.quit()
