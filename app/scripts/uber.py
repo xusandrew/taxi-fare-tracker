@@ -6,11 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-inputs = [
-    [['Toronto Pearson International Airport (YYZ), 3111 Convair Dr, Mississauga, Ontario L4W 1S9, Canada'],
-     ['Toronto, Ontario, Canada']],
-    []
-]
+from data import inputs
 
 # start up selenium
 options = Options()
@@ -39,12 +35,27 @@ def scrape_links(first, second):
     def getPrice(element):
         price = element.get_attribute('innerHTML')
         price = price[1:]
+        print(price)
         return float(price)
 
     results = map(getPrice, results)
     return min(results)
 
 
-price = scrape_links(inputs[0][0], inputs[0][1])
+def find_prices():
+    '''Loops through all of the input data, and calls scrape_links
+    for the two links. Then returns the prices from the airport to
+    the city center, and from the city center back to the airport
+    '''
 
+    for city_name in inputs:
+        values = inputs[city_name]
+        airport_to_center = scrape_links(values['airport'], values['center'])
+        center_to_airport = scrape_links(values['center'], values['airport'])
+        print(city_name)
+        print("ap to c: " + str(airport_to_center))
+        print(center_to_airport)
+
+
+find_prices()
 driver.quit()
