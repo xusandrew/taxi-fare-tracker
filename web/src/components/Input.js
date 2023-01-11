@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 const Input = () => {
   const [country, setCountry] = useState('')
   const [city, setCity] = useState('')
-  const [distance, setDistance] = useState('')
 
   const [countryChoices, setCountryChoices] = useState([])
   const [cityChoices, setCityChoices] = useState([])
@@ -45,15 +44,7 @@ const Input = () => {
   const onSubmit = async e => {
     e.preventDefault()
     try {
-      console.log(
-        `http://localhost:5000/submit?country=${country}&city=${city}&distance=${distance}`
-      )
-      let response = await fetch(
-        `http://localhost:5000/submit?country=${country}&city=${city}&distance=${distance}`
-      )
-      response = await response.json()
-
-      console.log(response)
+      //
     } catch (err) {
       console.error(err)
     }
@@ -102,13 +93,6 @@ const Input = () => {
             setCity(e.target.value)
             searchCitys(e.target.value)
           }}
-        />
-
-        <label>Distance(km)</label>
-        <input
-          type='number'
-          value={distance}
-          onChange={e => setDistance(e.target.value)}
         />
 
         <button type='submit'>Submit</button>
