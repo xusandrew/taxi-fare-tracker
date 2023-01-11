@@ -12,7 +12,7 @@ from data import inputs
 
 # start up selenium
 options = Options()
-# options.headless = True
+options.headless = True
 driver = webdriver.Chrome(service=ChromeService(
     ChromeDriverManager().install()), options=options)
 
@@ -37,7 +37,6 @@ def scrape_links(first, second):
     def getPrice(element):
         price = element.get_attribute('innerHTML')
         price = price[1:]
-        print(price)
         return float(price)
 
     results = map(getPrice, results)
@@ -63,7 +62,7 @@ def find_prices():
     return output
 
 
-def get_db_queries(data):
+def get_db_queries(city, data):
     pass
 
 
@@ -81,8 +80,8 @@ def upload(data):
         cur = conn.cursor()
 
         # commands
-        for query in get_db_queries(data):
-            cur.execute(query)
+        for city in data:
+            get_db_queries(city, data[city])
 
         cur.close()
         conn.commit()
@@ -95,5 +94,5 @@ def upload(data):
 
 
 airport_center_data = find_prices()
-upload()
+# upload()
 driver.quit()
