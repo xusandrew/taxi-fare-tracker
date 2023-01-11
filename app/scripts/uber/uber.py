@@ -8,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 import psycopg2
 
-from data import inputs
+from data import get_data
 
 # start up selenium
 options = Options()
@@ -43,15 +43,15 @@ def scrape_links(first, second):
     return min(results)
 
 
-def find_prices():
+def find_prices(data):
     '''Loops through all of the input data, and calls scrape_links
     for the two links. Then returns the prices from the airport to
     the city center, and from the city center back to the airport
     '''
 
     output = {}
-    for city_name in inputs:
-        values = inputs[city_name]
+    for city_name in data:
+        values = data[city_name]
         airport_to_center = scrape_links(values['airport'], values['center'])
         center_to_airport = scrape_links(values['center'], values['airport'])
 
@@ -101,6 +101,7 @@ def upload(data):
             print('DB Conn closed')
 
 
-airport_center_data = find_prices()
+inputs = get_data()
+airport_center_data = find_prices(inputs)
 upload(airport_center_data)
 driver.quit()
