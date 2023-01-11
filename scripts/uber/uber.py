@@ -55,7 +55,7 @@ def get_data():
 
 def scrape_links(first, second):
     '''Takes in 2 strings for locations, one for each input
-    on the page. Then submits these and returns cheapest price 
+    on the page. Then submits these and returns cheapest price
     from the options.'''
 
     driver.get('https://uberfarefinder.com/')
@@ -86,16 +86,10 @@ def find_prices(data):
     '''
 
     output = {}
-<<<<<<< HEAD
-    for (city_name, coords) in data.items():
-        coords = data[city_name]
-        airport_to_center = scrape_links(coords['airport'], coords['center'])
-        center_to_airport = scrape_links(coords['center'], coords['airport'])
-=======
+
     for (city_name, links) in data.items():
         airport_to_center = scrape_links(links['airport'], links['center'])
         center_to_airport = scrape_links(links['center'], links['airport'])
->>>>>>> ce70b94 (Add timestamp to uber entries)
 
         output[city_name] = {
             'airport_to_center': airport_to_center,
@@ -108,11 +102,11 @@ def get_db_query(city, city_data, route_data):
     '''Return query to update values in database with values in data'''
 
     return ("""
-        INSERT INTO uberfares 
+        INSERT INTO uberfares
         (
-            city, 
-            airport, 
-            center, 
+            city,
+            airport,
+            center,
             airporttocenter,
             centertoairport
         )
@@ -139,11 +133,7 @@ def upload(city_data, route_data):
         cur = conn.cursor()
 
         # commands
-<<<<<<< HEAD
-        for city_name in data:
-=======
         for city_name in route_data:
->>>>>>> ce70b94 (Add timestamp to uber entries)
             query = get_db_query(
                 city_name, city_data[city_name], route_data[city_name])
             cur.execute(query)
@@ -160,10 +150,5 @@ def upload(city_data, route_data):
 
 city_data = get_data()
 route_data = find_prices(city_data)
-<<<<<<< HEAD
-upload(route_data)
-driver.quit()
-=======
 upload(city_data, route_data)
 driver.close()
->>>>>>> ce70b94 (Add timestamp to uber entries)
