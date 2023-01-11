@@ -1,9 +1,89 @@
+:root {
+  box-sizing: border-box;
+
+  --background-color: #161925;
+  --text-color: #f8fff4;
+  --color1: #23395b;
+  --color2: #406e8e;
+  --color3: #8ea8c3;
+  --color4: #db5461;
+}
+
 #body {
   width: 100vw;
   height: 100vh;
+  margin: 0;
+  border: 0;
+  background-color: var(--background-color);
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+
+h1 {
+  margin: 200px 30px 0px 30px;
+  font-size: clamp(20px, 7vw, 75px);
+  text-align: center;
+  color: var(--text-color);
+}
+
+p {
+  color: var(--text-color);
+  max-width: 30vw;
+  text-align: center;
+}
+
+form {
+  padding: 10px;
+  width: 100vw;
+
+  color: var(--text-color);
+  background-color: var(--color1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+h3 {
+  margin: 10px;
+}
+
+.form-input-section {
+  justify-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 50px;
+  justify-items: center;
+}
+
+form label {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+form input {
+  background-color: var(--text-color);
+  width: 100%;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+form button[type='submit'] {
+  grid-column: span 2;
+  justify-self: center;
+  margin: 10px;
+
+  width: 100px;
+  height: 50px;
+  border-radius: 15px;
+
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 0;
 }

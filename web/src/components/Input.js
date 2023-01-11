@@ -71,30 +71,32 @@ const Input = () => {
       </datalist>
 
       <form onSubmit={onSubmit}>
-        <label>Country:</label>
-        <input
-          type='text'
-          list='countries'
-          value={country}
-          onChange={e => {
-            setCountry(e.target.value)
-            searchCountries(e.target.value)
-            searchCitys(null, e.target.value)
-          }}
-        />
+        <h3>Select your city:</h3>
+        <div className='form-input-section'>
+          <label>Country</label>
+          <label>City</label>
+          <input
+            type='text'
+            list='countries'
+            value={country}
+            onChange={e => {
+              setCountry(e.target.value)
+              searchCountries(e.target.value)
+              searchCitys(null, e.target.value)
+            }}
+          />
+          <input
+            type='text'
+            list='cities'
+            value={city}
+            onChange={e => {
+              setCity(e.target.value)
+              searchCitys(e.target.value)
+            }}
+          />
+        </div>
 
-        <label>City:</label>
-        <input
-          type='text'
-          list='cities'
-          value={city}
-          onChange={e => {
-            setCity(e.target.value)
-            searchCitys(e.target.value)
-          }}
-        />
-
-        <button type='submit'>Submit</button>
+        <button type='submit'>Search</button>
       </form>
     </>
   )
