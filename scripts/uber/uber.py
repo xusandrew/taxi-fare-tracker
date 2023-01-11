@@ -86,10 +86,16 @@ def find_prices(data):
     '''
 
     output = {}
+<<<<<<< HEAD
     for (city_name, coords) in data.items():
         coords = data[city_name]
         airport_to_center = scrape_links(coords['airport'], coords['center'])
         center_to_airport = scrape_links(coords['center'], coords['airport'])
+=======
+    for (city_name, links) in data.items():
+        airport_to_center = scrape_links(links['airport'], links['center'])
+        center_to_airport = scrape_links(links['center'], links['airport'])
+>>>>>>> ce70b94 (Add timestamp to uber entries)
 
         output[city_name] = {
             'airport_to_center': airport_to_center,
@@ -119,7 +125,7 @@ def get_db_query(city, city_data, route_data):
                    ))
 
 
-def upload(data):
+def upload(city_data, route_data):
     '''Upload data generated from find_prices() to PSQL database'''
 
     conn = None
@@ -133,7 +139,11 @@ def upload(data):
         cur = conn.cursor()
 
         # commands
+<<<<<<< HEAD
         for city_name in data:
+=======
+        for city_name in route_data:
+>>>>>>> ce70b94 (Add timestamp to uber entries)
             query = get_db_query(
                 city_name, city_data[city_name], route_data[city_name])
             cur.execute(query)
@@ -150,5 +160,10 @@ def upload(data):
 
 city_data = get_data()
 route_data = find_prices(city_data)
+<<<<<<< HEAD
 upload(route_data)
 driver.quit()
+=======
+upload(city_data, route_data)
+driver.close()
+>>>>>>> ce70b94 (Add timestamp to uber entries)
