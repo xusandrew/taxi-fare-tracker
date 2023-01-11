@@ -1,15 +1,41 @@
-data = {
-    'Toronto': {
-        'airport-lat': 43.688442230,
-        'airport-long': -79.62175750,
-        'center-lat': 43.64793014,
-        'center-long': -79.38478088
-    },
+import psycopg2
 
-    'Vancouver': {
-        'airport-lat': 49.193506,
-        'airport-long': -123.180405,
-        'center-lat': 49.256538,
-        'center-long': -123.101997
-    }
-}
+
+def get_data():
+    '''Get data about cities from database'''
+    results = []
+
+    conn = None
+    try:
+        # connect to the PostgreSQL server
+        print("Connecting to server")
+        conn = psycopg2.connect(
+            database="taxifaretracker", user="andrew", password="")
+        print("Connected")
+
+        cur = conn.cursor()
+
+        # commands
+        query = "SELECT city, airportLat, airportLong, centerLat, centerLong FROM lyftfares;"
+        cur.execute(query)
+
+        results = cur.fetchall()
+
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print('DB Conn closed')
+
+    output = {}
+    for row in results:
+        output[row[0]] = {
+            'airport-lat': row[1],
+            'airport-long': row[2],
+            'center-lat': row[3],
+            'center-long': row[4]
+        }
+
+    return output

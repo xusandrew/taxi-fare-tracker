@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 import psycopg2
 
-from data import data as d
+from data import get_data
 
 # start up selenium
 options = Options()
@@ -94,6 +94,6 @@ def upload(data):
             print('DB Conn closed')
 
 
-route_data = find_prices(d)
+route_data = find_prices(get_data())
 upload(route_data)
 driver.close()
