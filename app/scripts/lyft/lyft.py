@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 
-from data import data
+from data import data as d
 
 # start up selenium
 options = Options()
@@ -25,12 +25,25 @@ def scrape_coords(o_lat, o_long, d_lat, d_long):
     price = prices[0].get_attribute('innerHTML')
     price_range = price[1:].split(' - ')
     price = (float(price_range[0]) + float(price_range[1]))/2
-    print(price)
+    return price
 
 
-for city in data:
-    coords = data[city]
-    scrape_coords(coords['airport-lat'], coords['airport-long'],
-                  coords['center-lat'], coords['center-long'])
+def find_prices(data):
+    output = {}
+    for city_name in data:
+        coords = data[city_name]
+        airport_to_center = scrape_coords(coords['airport-lat'], coords['airport-long'],
+                                          coords['center-lat'], coords['center-long'])
+        center_to_airport = scrape_coords(coords['center-lat'], coords['center-long'],
+                                          coords['airport-lat'], coords['airport-long'])
 
+        output[city_name] = {
+            'airport_to_center': airport_to_center,
+            'center_to_airport': center_to_airport
+        }
+    return output
+
+
+route_data = find_prices(d)
+print(route_data)
 driver.close()
