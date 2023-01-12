@@ -5,7 +5,7 @@ import Input from './components/Input'
 import Info from './components/Info'
 
 function App() {
-  const [city, setCity] = useState('')
+  const [city, setCity] = useState('Toronto')
   const [displayData, setDisplayData] = useState(false)
 
   const onChangeCity = val => {
