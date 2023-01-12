@@ -24,6 +24,7 @@ const TaxiTable = props => {
 
   return (
     <>
+      <h3>Average taxi fares per km:</h3>
       <div className='table-wrapper'>
         <table>
           <thead>
