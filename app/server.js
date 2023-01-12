@@ -6,7 +6,7 @@ const pool = require('./src/db')
 app.use(cors())
 app.use(express.json())
 
-app.get('/countries/:country', async (req, res) => {
+app.get('/countrylist/:country', async (req, res) => {
   try {
     let { country } = req.params
 
@@ -27,7 +27,7 @@ app.get('/countries/:country', async (req, res) => {
   }
 })
 
-app.get('/city', async (req, res) => {
+app.get('/citylist', async (req, res) => {
   try {
     let city = req.query.city
     city = city.toLowerCase()
@@ -59,6 +59,27 @@ app.get('/city', async (req, res) => {
     res.json(data.rows)
   } catch (err) {
     console.error(err.message)
+  }
+})
+
+app.get('/graph/:city', async (req, res) => {
+  try {
+    let { city } = req.params
+    let response = {}
+
+    let query = `SELECT * FROM uberfares WHERE city='${city}'`
+    let uber_data = await pool.query(query)
+    uber_data = uber_data.rows
+    response['uber'] = uber_data
+
+    query = `SELECT * FROM lyftfares WHERE city='${city}'`
+    let lyft_data = await pool.query(query)
+    lyft_data = lyft_data.rows
+    response['lyft'] = lyft_data
+
+    res.json(response)
+  } catch (err) {
+    console.error(err)
   }
 })
 
