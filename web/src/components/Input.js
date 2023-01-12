@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
 const Input = props => {
-  const [city, setCity] = useState('')
   const [cityChoices, setCityChoices] = useState([])
 
-  const searchCitys = async (city_val, country_val) => {
+  const searchCitys = async city_val => {
     try {
       if (!city_val) city_val = 'empty'
 
@@ -37,9 +36,9 @@ const Input = props => {
         <input
           type='text'
           list='cities'
-          value={city}
+          value={props.city}
           onChange={e => {
-            setCity(e.target.value)
+            props.onChange()
             searchCitys(e.target.value)
           }}
         />
