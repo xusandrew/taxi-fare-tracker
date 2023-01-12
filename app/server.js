@@ -30,7 +30,7 @@ app.get('/citylist/:text', async (req, res) => {
   }
 })
 
-app.get('/graph/:city', async (req, res) => {
+app.get('/routes/:city', async (req, res) => {
   try {
     let { city } = req.params
     city = format(city)
