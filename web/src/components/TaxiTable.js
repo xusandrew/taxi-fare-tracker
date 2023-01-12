@@ -4,14 +4,11 @@ const TaxiTable = props => {
   const [taxiStart, setTaxiStart] = useState(0)
   const [taxiPerKm, setTaxiPerKm] = useState(0)
 
-  const entries = [
-    [1, 10],
-    [2, 15],
-    [5, 20],
-    [8, 25],
-  ]
+  const entries = [1, 2, 5, 8, 10, 15, 20, 25]
 
   const get_price = num => taxiStart + num * taxiPerKm
+
+  const showGraph = () => {}
 
   return (
     <>
@@ -21,20 +18,20 @@ const TaxiTable = props => {
             <tr>
               <th>Distance</th>
               <th>Price</th>
-              <th>| |</th>
-              <th>Distance</th>
-              <th>Price</th>
+              <th>Graph</th>
             </tr>
           </thead>
           <tbody>
-            {entries.map(entry => {
+            {entries.map(num => {
               return (
                 <tr>
-                  <th>{entry[0]} km</th>
-                  <th>${get_price(entry[0])}</th>
-                  <th>| |</th>
-                  <th>{entry[1]} km</th>
-                  <th>${get_price(entry[0])}</th>
+                  <th>{num} km</th>
+                  <th>${get_price(num)}</th>
+                  <th>
+                    <button onClick={showGraph} className='button small'>
+                      Graph
+                    </button>
+                  </th>
                 </tr>
               )
             })}
