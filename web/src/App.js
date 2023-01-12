@@ -6,6 +6,7 @@ import Info from './components/Info'
 
 function App() {
   const [city, setCity] = useState('')
+  const [displayData, setDisplayData] = useState(false)
 
   const onChangeCity = val => {
     setCity(val)
@@ -14,6 +15,16 @@ function App() {
   const onSubmitCity = async e => {
     e.preventDefault()
     try {
+      let cities = await fetch(`http://localhost:5000/citylist/-`)
+      cities = await cities.json()
+      cities = cities.map(row => row.city)
+
+      if (!cities.includes(city)) {
+        alert('Pick a country from the given list.')
+        return
+      }
+
+      setDisplayData(true)
     } catch (err) {
       console.error(err)
     }
@@ -22,7 +33,7 @@ function App() {
   return (
     <div id='container'>
       <Input value={city} onChange={onChangeCity} onSubmit={onSubmitCity} />
-      <Info />
+      <Info city={city} displayData={displayData} />
     </div>
   )
 }

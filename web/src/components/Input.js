@@ -11,7 +11,6 @@ const Input = props => {
 
       let response = await fetch(fetch_url)
       response = await response.json()
-      console.log(response)
       response = response.map(res => res['city'])
       setCityChoices(response)
     } catch (err) {
@@ -32,14 +31,14 @@ const Input = props => {
         ))}
       </datalist>
 
-      <form onSubmit={props.onSubmitCity}>
+      <form onSubmit={props.onSubmit}>
         <h3>Select your city:</h3>
         <input
           type='text'
           list='cities'
           value={props.city}
           onChange={e => {
-            props.onChange()
+            props.onChange(e.target.value)
             searchCitys(e.target.value)
           }}
         />
