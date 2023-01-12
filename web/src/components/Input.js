@@ -13,7 +13,7 @@ const Input = () => {
       if (!country_val) country_val = 'empty'
 
       let response = await fetch(
-        `http://localhost:5000/countries/${country_val}`
+        `http://localhost:5000/countrylist/${country_val}`
       )
       response = await response.json()
       response = response.map(res => res['country'])
@@ -27,7 +27,7 @@ const Input = () => {
     try {
       if (!city_val) city_val = 'empty'
 
-      let fetch_url = `http://localhost:5000/city?city=${city_val}`
+      let fetch_url = `http://localhost:5000/citylist?city=${city_val}`
 
       if (countryChoices.includes(country_val)) {
         fetch_url += `&country=${country_val}`
