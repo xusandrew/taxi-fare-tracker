@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 const Input = () => {
   const [country, setCountry] = useState('')
   const [city, setCity] = useState('')
-  const [distance, setDistance] = useState('')
 
   const [countryChoices, setCountryChoices] = useState([])
   const [cityChoices, setCityChoices] = useState([])
@@ -45,15 +44,7 @@ const Input = () => {
   const onSubmit = async e => {
     e.preventDefault()
     try {
-      console.log(
-        `http://localhost:5000/submit?country=${country}&city=${city}&distance=${distance}`
-      )
-      let response = await fetch(
-        `http://localhost:5000/submit?country=${country}&city=${city}&distance=${distance}`
-      )
-      response = await response.json()
-
-      console.log(response)
+      //
     } catch (err) {
       console.error(err)
     }
@@ -79,39 +70,33 @@ const Input = () => {
         ))}
       </datalist>
 
-      <h1>Taxi Fares</h1>
       <form onSubmit={onSubmit}>
-        <label>Country:</label>
-        <input
-          type='text'
-          list='countries'
-          value={country}
-          onChange={e => {
-            setCountry(e.target.value)
-            searchCountries(e.target.value)
-            searchCitys(null, e.target.value)
-          }}
-        />
+        <h3>Select your city:</h3>
+        <div className='form-input-section'>
+          <label>Country</label>
+          <label>City</label>
+          <input
+            type='text'
+            list='countries'
+            value={country}
+            onChange={e => {
+              setCountry(e.target.value)
+              searchCountries(e.target.value)
+              searchCitys(null, e.target.value)
+            }}
+          />
+          <input
+            type='text'
+            list='cities'
+            value={city}
+            onChange={e => {
+              setCity(e.target.value)
+              searchCitys(e.target.value)
+            }}
+          />
+        </div>
 
-        <label>City:</label>
-        <input
-          type='text'
-          list='cities'
-          value={city}
-          onChange={e => {
-            setCity(e.target.value)
-            searchCitys(e.target.value)
-          }}
-        />
-
-        <label>Distance(km)</label>
-        <input
-          type='number'
-          value={distance}
-          onChange={e => setDistance(e.target.value)}
-        />
-
-        <button type='submit'>Submit</button>
+        <button type='submit'>Search</button>
       </form>
     </>
   )

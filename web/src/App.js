@@ -3,17 +3,20 @@ import './App.css'
 
 // Components
 import Input from './components/Input'
-import Graph from './components/Graph'
+
+import Title from './components/Title'
+import Info from './components/Info'
 
 function App() {
   const [currentCity, setCurrentCity] = useState('Vancouver')
 
   return (
-    <>
+    <div id='body'>
+      <Title />
       <Input />
-      <div>
-        <Graph city={currentCity} table_name='airporttocenter' />
-      </div>
+      <Info />
+    </div>
+
     </>
   )
 }
