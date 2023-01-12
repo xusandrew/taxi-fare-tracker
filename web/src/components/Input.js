@@ -34,7 +34,7 @@ const Input = props => {
       <form onSubmit={props.onSubmit}>
         <h2>Select your city:</h2>
 
-        <div class='col-6 col-12-xsmall'>
+        <div className='col-6 col-12-xsmall'>
           <input
             type='text'
             list='cities'
