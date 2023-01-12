@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import RouteGraph from './RouteGraph'
 
 const RouteTable = props => {
   const [uberPrice, setUberPrice] = useState({
@@ -10,6 +11,9 @@ const RouteTable = props => {
     centertoairport: 0,
     airporttocenter: 0,
   })
+
+  const [showTable, setShowTable] = useState(false)
+  const [tableName, setTableName] = useState('airporttocenter')
 
   const get_data = async city => {
     let data = await fetch(`http://localhost:5000/routes/${city}`)
@@ -39,51 +43,87 @@ const RouteTable = props => {
     return price[route]
   }
 
+  const format_title = name => {
+    return name === 'airporttocenter'
+      ? 'Airport to City Center'
+      : 'City Center to Airport'
+  }
+
+  const show_graph = name => {
+    setTableName(name)
+    setShowTable(true)
+  }
+
   useEffect(() => {
     get_data(props.city)
   }, [props.city])
 
-  return (
-    <>
-      <h3>Routes in {props.city}:</h3>
-      <div className='table-wrapper'>
-        <table>
-          <thead>
-            <tr>
-              <th style={{ color: 'white' }}>You found me!</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th colSpan='5'>Airport to City Center</th>
-            </tr>
-            <tr>
-              <th>Uber</th>
-              <th>${get_price('uber', 'airporttocenter')}</th>
-              <th>Lyft</th>
-              <th>${get_price('lyft', 'centertoairport')}</th>
-              <th>
-                <button className='button small'>Graph</button>
-              </th>
-            </tr>
+  if (showTable) {
+    return (
+      <>
+        <h3>
+          Routes in {props.city}: {format_title(tableName)}
+        </h3>
+        <RouteGraph table_name={tableName} />
+      </>
+    )
+  } else {
+    return (
+      <>
+        <h3>Routes in {props.city}:</h3>
+        <div className='table-wrapper'>
+          <table>
+            <thead>
+              <tr>
+                <th style={{ color: 'white' }}>You found me!</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th colSpan='5'>Airport to City Center</th>
+              </tr>
+              <tr>
+                <th>Uber</th>
+                <th>${get_price('uber', 'airporttocenter')}</th>
+                <th>Lyft</th>
+                <th>${get_price('lyft', 'airporttocenter')}</th>
+                <th>
+                  <button
+                    className='button small'
+                    onClick={() => {
+                      show_graph('airporttocenter')
+                    }}
+                  >
+                    Graph
+                  </button>
+                </th>
+              </tr>
 
-            <tr>
-              <th colSpan='5'>City Center to Airport</th>
-            </tr>
-            <tr>
-              <th>Uber</th>
-              <th>${get_price('uber', 'airporttocenter')}</th>
-              <th>Lyft</th>
-              <th>${get_price('lyft', 'centertoairport')}</th>
-              <th>
-                <button className='button small'>Graph</button>
-              </th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </>
-  )
+              <tr>
+                <th colSpan='5'>City Center to Airport</th>
+              </tr>
+              <tr>
+                <th>Uber</th>
+                <th>${get_price('uber', 'centertoairport')}</th>
+                <th>Lyft</th>
+                <th>${get_price('lyft', 'centertoairport')}</th>
+                <th>
+                  <button
+                    className='button small'
+                    onClick={() => {
+                      show_graph('centertoairport')
+                    }}
+                  >
+                    Graph
+                  </button>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
 }
 
 export default RouteTable
