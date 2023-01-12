@@ -52,30 +52,19 @@ app.get('/graph/:city', async (req, res) => {
   }
 })
 
-app.get('/submit', async (req, res) => {
+app.get('/taxi/:city', async (req, res) => {
   try {
-    let city = req.query.city
-    city = city.toLowerCase()
-    city = city.charAt(0).toUpperCase() + city.slice(1)
+    let { city } = req.params
+    city = format(city)
 
-    let country = req.query.country
-    country = country.toLowerCase()
-    country = country.charAt(0).toUpperCase() + country.slice(1)
-
-    let distance = req.query.distance
-
-    let query = `SELECT * FROM taxifares WHERE country='${country}' AND city='${city}';`
+    let query = `SELECT * FROM taxifares WHERE city='${city}';`
     let data = await pool.query(query)
-    data = data.rows[0]
+    data = data.rows
 
     if (!data) {
       res.json('')
     }
 
-    const price =
-      parseFloat(data['taxistart']) + distance * parseFloat(data['taxiperkm'])
-
-    data['price'] = price
     res.json(data)
   } catch (err) {
     console.error(err.message)
