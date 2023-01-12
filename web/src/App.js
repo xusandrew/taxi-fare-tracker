@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './App.css'
 
 // Components
@@ -8,16 +8,12 @@ import Title from './components/Title'
 import Info from './components/Info'
 
 function App() {
-  const [currentCity, setCurrentCity] = useState('Vancouver')
-
   return (
     <div id='body'>
       <Title />
       <Input />
       <Info />
     </div>
-
-    </>
   )
 }
 
