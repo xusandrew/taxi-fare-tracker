@@ -24,33 +24,65 @@ const RouteGraph = props => {
     ],
   })
 
-  const parseData = responseData => {
+  const parse_data = responseData => {
     let all_routes = responseData['uber'].concat(responseData['lyft'])
+
+    all_routes = all_routes.map(e => {
+      e.time = e.time.slice(0, -11)
+      e.time += ':00:00'
+      e.time = new Date(e.time)
+      return e
+    })
+
+    const seen = {
+      Uber: [],
+      Lyft: [],
+    }
+
+    all_routes = all_routes.filter(e => {
+      let company
+      if (!e['centerlat']) {
+        company = 'Uber'
+      } else {
+        company = 'Lyft'
+      }
+
+      const duplicate = seen[company].includes(e.time.getTime())
+      if (!duplicate) {
+        seen[company].push(e.time.getTime())
+      }
+      return !duplicate
+    })
+
     all_routes.sort((e1, e2) => {
-      let e1_time = e1.time.slice(0, -1)
-      let e2_time = e2.time.slice(0, -1)
-      return new Date(e1_time) - new Date(e2_time)
+      return e1.time - e2.time
     })
 
-    const labels = all_routes.map(e => {
-      return new Date(e.time).toLocaleString()
-    })
-
-    const uber_data = all_routes.map(e => {
-      if (!e.airport) {
-        // Has no airport property, so lyft
-        return null
+    let seen_times = []
+    seen['Uber'].forEach(e => {
+      if (seen['Lyft'].includes(e)) {
+        seen_times.push(e)
       }
-      return e[props.table_name]
     })
 
-    const lyft_data = all_routes.map(e => {
-      if (!e.airportlat) {
-        // Has no airportlat property, so uber
-        return null
+    all_routes = all_routes.filter(e => {
+      if (!seen_times.includes(e.time.getTime())) {
+        return false
       }
-      return e[props.table_name]
+      return true
     })
+
+    const labels = seen_times.map(e => {
+      let date = new Date(e)
+      return date.getHours().toString() + ':00'
+    })
+
+    let uber_data = all_routes.filter(e => e.airport)
+
+    uber_data = uber_data.map(e => e[props.table_name])
+
+    let lyft_data = all_routes.filter(e => e.airportlat)
+    lyft_data = lyft_data.map(e => e[props.table_name])
 
     setData({
       labels: labels,
@@ -79,7 +111,7 @@ const RouteGraph = props => {
     const fetch_url = `http://localhost:5000/routes/${props.city}`
     let response = await fetch(fetch_url)
     response = await response.json()
-    parseData(response, props.table_name)
+    parse_data(response, props.table_name)
   }
 
   useEffect(() => {
