@@ -5,12 +5,13 @@ const Input = props => {
 
   const searchCitys = async city_val => {
     try {
-      if (!city_val) city_val = 'empty'
+      if (!city_val) city_val = '-'
 
-      let fetch_url = `http://localhost:5000/citylist?city=${city_val}`
+      let fetch_url = `http://localhost:5000/citylist/${city_val}`
 
       let response = await fetch(fetch_url)
       response = await response.json()
+      console.log(response)
       response = response.map(res => res['city'])
       setCityChoices(response)
     } catch (err) {

@@ -6,32 +6,21 @@ const pool = require('./src/db')
 app.use(cors())
 app.use(express.json())
 
-app.get('/citylist', async (req, res) => {
-  try {
-    let city = req.query.city
-    city = city.toLowerCase()
-    city = city.charAt(0).toUpperCase() + city.slice(1)
+const format = text => {
+  text = text.toLowerCase()
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
 
-    let country = null
-    if (req.query.country) {
-      country = req.query.country
-      country = country.toLowerCase()
-      country = country.charAt(0).toUpperCase() + country.slice(1)
-    }
+app.get('/citylist/:text', async (req, res) => {
+  try {
+    let { text } = req.params
+    text = format(text)
 
     let query
-    if (city === 'Empty') {
-      if (country) {
-        query = `SELECT country, city FROM taxifares WHERE country = '${country}'ORDER BY city;`
-      } else {
-        query = `SELECT country, city FROM taxifares ORDER BY city;`
-      }
+    if (text === '-') {
+      query = `SELECT DISTINCT city FROM uberfares ORDER BY city;`
     } else {
-      if (country) {
-        query = `SELECT country, city FROM taxifares WHERE country = '${country}' AND city LIKE '${city}%' ORDER BY city;`
-      } else {
-        query = `SELECT country, city FROM taxifares WHERE city LIKE '${city}%' ORDER BY city;`
-      }
+      query = `SELECT DISTINCT city FROM uberfares WHERE city LIKE '${text}%' ORDER BY city;`
     }
 
     const data = await pool.query(query)
@@ -44,8 +33,9 @@ app.get('/citylist', async (req, res) => {
 app.get('/graph/:city', async (req, res) => {
   try {
     let { city } = req.params
-    let response = {}
+    city = format(city)
 
+    response = {}
     let query = `SELECT * FROM uberfares WHERE city='${city}'`
     let uber_data = await pool.query(query)
     uber_data = uber_data.rows
