@@ -14,7 +14,6 @@ function App() {
   const onSubmitCity = async e => {
     e.preventDefault()
     try {
-      setCity()
     } catch (err) {
       console.error(err)
     }

@@ -6,27 +6,6 @@ const pool = require('./src/db')
 app.use(cors())
 app.use(express.json())
 
-app.get('/countrylist/:country', async (req, res) => {
-  try {
-    let { country } = req.params
-
-    country = country.toLowerCase()
-    country = country.charAt(0).toUpperCase() + country.slice(1)
-
-    let query
-    if (country === 'Empty') {
-      query = `SELECT DISTINCT country FROM taxifares ORDER BY country;`
-    } else {
-      query = `SELECT DISTINCT country FROM taxifares WHERE country LIKE '${country}%' ORDER BY country;`
-    }
-
-    const data = await pool.query(query)
-    res.json(data.rows)
-  } catch (err) {
-    console.error(err.message)
-  }
-})
-
 app.get('/citylist', async (req, res) => {
   try {
     let city = req.query.city
