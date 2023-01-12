@@ -88,6 +88,10 @@ form button[type='submit'] {
   border: 0;
 }
 
+form button[type='submit']:active {
+  background-color: var(--color3);
+}
+
 .bottom {
   width: 90%;
   height: 100%;
