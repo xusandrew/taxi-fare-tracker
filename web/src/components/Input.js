@@ -32,18 +32,29 @@ const Input = props => {
       </datalist>
 
       <form onSubmit={props.onSubmit}>
-        <h3>Select your city:</h3>
-        <input
-          type='text'
-          list='cities'
-          value={props.city}
-          onChange={e => {
-            props.onChange(e.target.value)
-            searchCitys(e.target.value)
-          }}
-        />
+        <h2>Select your city:</h2>
 
-        <button type='submit'>Search</button>
+        <div class='col-6 col-12-xsmall'>
+          <input
+            type='text'
+            list='cities'
+            value={props.city}
+            onChange={e => {
+              props.onChange(e.target.value)
+              searchCitys(e.target.value)
+            }}
+            className='col-6'
+            placeholder='City'
+          />
+        </div>
+
+        <button
+          type='submit'
+          className='button'
+          style={{ marginTop: '1.5rem' }}
+        >
+          Search
+        </button>
       </form>
     </>
   )
