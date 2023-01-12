@@ -12,7 +12,7 @@ function App() {
     <>
       <Input />
       <div>
-        <Graph city={currentCity} />
+        <Graph city={currentCity} table_name='airporttocenter' />
       </div>
     </>
   )
