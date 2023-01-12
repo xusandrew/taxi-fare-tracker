@@ -77,8 +77,9 @@ const RouteGraph = props => {
 
   const getData = async () => {
     const fetch_url = `http://localhost:5000/routes/${props.city}`
-    const response = await fetch(fetch_url)
-    parseData(await response.json(), props.table_name)
+    let response = await fetch(fetch_url)
+    response = await response.json()
+    parseData(response, props.table_name)
   }
 
   useEffect(() => {

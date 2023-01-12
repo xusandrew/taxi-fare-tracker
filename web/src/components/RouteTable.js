@@ -64,7 +64,7 @@ const RouteTable = props => {
         <h3>
           Routes in {props.city}: {format_title(tableName)}
         </h3>
-        <RouteGraph table_name={tableName} />
+        <RouteGraph city={props.city} table_name={tableName} />
       </>
     )
   } else {

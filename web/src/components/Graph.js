@@ -25,7 +25,7 @@ ChartJS.register(
 
 const Graph = props => {
   const options = {
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     plugins: {
       title: {
         display: true,
