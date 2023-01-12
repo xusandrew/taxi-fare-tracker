@@ -111,7 +111,19 @@ const Graph = ({ city, table_name }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const options = {}
+  const options = {
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        color: 'white',
+        text:
+          table_name === 'centertoairport'
+            ? 'Center to Airport'
+            : 'Airport to Center',
+      },
+    },
+  }
 
   return (
     <>
