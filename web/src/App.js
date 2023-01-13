@@ -31,10 +31,10 @@ function App() {
   }
 
   return (
-    <div id='container'>
+    <>
       <Input value={city} onChange={onChangeCity} onSubmit={onSubmitCity} />
       <Info city={city} displayData={displayData} />
-    </div>
+    </>
   )
 }
 

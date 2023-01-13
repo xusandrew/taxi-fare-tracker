@@ -78,7 +78,6 @@ const RouteGraph = props => {
     })
 
     let uber_data = all_routes.filter(e => e.airport)
-
     uber_data = uber_data.map(e => e[props.table_name])
 
     let lyft_data = all_routes.filter(e => e.airportlat)

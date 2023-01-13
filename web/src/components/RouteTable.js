@@ -13,7 +13,7 @@ const RouteTable = props => {
   })
 
   const [showTable, setShowTable] = useState(false)
-  const [tableName, setTableName] = useState('airporttocenter')
+  const [tableName, setTableName] = useState('')
 
   const get_data = async city => {
     let data = await fetch(`http://localhost:5000/routes/${city}`)
