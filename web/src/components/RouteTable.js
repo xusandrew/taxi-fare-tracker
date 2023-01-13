@@ -90,7 +90,9 @@ const RouteTable = props => {
           <table>
             <thead>
               <tr>
-                <th style={{ color: 'white' }}>You found me!</th>
+                <th colSpan='5' style={{ color: 'white' }}>
+                  You found me!
+                </th>
               </tr>
             </thead>
             <tbody>
