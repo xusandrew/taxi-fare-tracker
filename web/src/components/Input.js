@@ -38,7 +38,7 @@ const Input = props => {
           <input
             type='text'
             list='cities'
-            value={props.city}
+            value={props.value}
             onChange={e => {
               props.onChange(e.target.value)
               searchCitys(e.target.value)

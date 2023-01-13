@@ -5,11 +5,12 @@ import Input from './components/Input'
 import Info from './components/Info'
 
 function App() {
-  const [city, setCity] = useState('Toronto')
+  const [cityText, setCityText] = useState('')
+  const [city, setCity] = useState('')
   const [displayData, setDisplayData] = useState(false)
 
   const onChangeCity = val => {
-    setCity(val)
+    setCityText(val)
   }
 
   const onSubmitCity = async e => {
@@ -19,11 +20,12 @@ function App() {
       cities = await cities.json()
       cities = cities.map(row => row.city)
 
-      if (!cities.includes(city)) {
+      if (!cities.includes(cityText)) {
         alert('Pick a country from the given list.')
         return
       }
 
+      setCity(cityText)
       setDisplayData(true)
     } catch (err) {
       console.error(err)
@@ -32,7 +34,7 @@ function App() {
 
   return (
     <>
-      <Input value={city} onChange={onChangeCity} onSubmit={onSubmitCity} />
+      <Input value={cityText} onChange={onChangeCity} onSubmit={onSubmitCity} />
       <Info city={city} displayData={displayData} />
     </>
   )

@@ -4,8 +4,10 @@ import RouteTable from './RouteTable'
 import TaxiTable from './TaxiTable'
 
 const Info = props => {
+  if (!props.displayData) return <></>
+
   return (
-    <section style={{ height: '1000px' }}>
+    <section>
       <div className='row'>
         <div className='col-6 col-12-medium'>
           <RouteTable city={props.city} />
