@@ -79,6 +79,7 @@ const TaxiTable = props => {
                           show_graph(num)
                         }}
                         className='button small'
+                        style={{ marginTop: '10.8px' }}
                       >
                         Graph
                       </button>

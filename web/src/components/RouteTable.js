@@ -107,6 +107,7 @@ const RouteTable = props => {
                     onClick={() => {
                       show_graph('airporttocenter')
                     }}
+                    style={{ marginTop: '10.8px' }}
                   >
                     Graph
                   </button>
@@ -127,6 +128,7 @@ const RouteTable = props => {
                     onClick={() => {
                       show_graph('centertoairport')
                     }}
+                    style={{ marginTop: '10.8px' }}
                   >
                     Graph
                   </button>
