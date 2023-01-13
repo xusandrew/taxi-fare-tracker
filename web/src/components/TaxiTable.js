@@ -29,6 +29,11 @@ const TaxiTable = props => {
     setTableNum(num)
   }
 
+  const close_graph = () => {
+    setShowTable(false)
+    setTableNum(0)
+  }
+
   useEffect(() => {
     get_data(props.city)
   }, [props.city])
@@ -38,6 +43,15 @@ const TaxiTable = props => {
       <>
         <h3>{format_title(tableNum)}</h3>
         <TaxiGraph city={props.city} table_name={tableNum} />
+        <button
+          className='button'
+          onClick={() => {
+            close_graph()
+          }}
+          style={{ marginTop: '10px', marginBottom: '30px' }}
+        >
+          Close
+        </button>
       </>
     )
   } else {
@@ -61,10 +75,12 @@ const TaxiTable = props => {
                     <th>${get_price(num)}</th>
                     <th>
                       <button
-                        onClick={show_graph(num)}
+                        onClick={() => {
+                          show_graph(num)
+                        }}
                         className='button small'
                       >
-                        Fluctuation Graph
+                        Graph
                       </button>
                     </th>
                   </tr>

@@ -35,15 +35,12 @@ const TaxiGraph = props => {
       return e.time.toDateString().slice(4)
     })
 
-    console.log(response_data)
     const graph_data = response_data.map(e => {
       let taxi_start = parseFloat(e.taxistart)
       let taxi_per_km = parseFloat(e.taxiperkm)
 
       return taxi_start + props.table_name * taxi_per_km
     })
-
-    console.log(graph_data)
 
     setData({
       labels: labels,

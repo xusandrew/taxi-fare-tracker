@@ -54,6 +54,11 @@ const RouteTable = props => {
     setShowTable(true)
   }
 
+  const close_graph = () => {
+    setShowTable(false)
+    setTableName('')
+  }
+
   useEffect(() => {
     get_data(props.city)
   }, [props.city])
@@ -65,6 +70,15 @@ const RouteTable = props => {
           Routes in {props.city}: {format_title(tableName)}
         </h3>
         <RouteGraph city={props.city} table_name={tableName} />
+        <button
+          className='button'
+          onClick={() => {
+            close_graph()
+          }}
+          style={{ marginTop: '10px', marginBottom: '30px' }}
+        >
+          Close
+        </button>
       </>
     )
   } else {
