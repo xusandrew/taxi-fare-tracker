@@ -75,25 +75,19 @@ def upload(countries):
 
         for country in countries:
             for city in country.cities:
-                cur.execute("""
+                cur.execute('''
                     INSERT INTO taxifares 
                     (
-                        country, 
                         city, 
                         taxistart, 
-                        taxiperkm, 
-                        currency
+                        taxiperkm
                     )
-                    VALUES (%s, %s, %s, %s, %s);
-                    """,
-                            (
-                                country.name,
-                                city.name,
-                                city.taxi_start,
-                                city.taxi_perkm,
-                                city.currency,
-                            )
-                            )
+                    VALUES (%s, %s, %s);
+                    ''', (
+                    city.name,
+                    city.taxi_start,
+                    city.taxi_perkm
+                ))
 
         cur.close()
         conn.commit()
@@ -105,16 +99,12 @@ def upload(countries):
             print('DB Conn closed')
 
 
-def run_scrape():
-    countries = scrape_countries()
-    print("Scraped country data")
+countries = scrape_countries()
+print("Scraped country data")
 
-    for country in countries:
-        scrape_cities(country)
-        print("Scraped cities from " + country.name)
-    print("Scraped all data")
+for country in countries:
+    scrape_cities(country)
+    print("Scraped cities from " + country.name)
+print("Scraped all data")
 
-    upload(countries)
-
-
-run_scrape()
+upload(countries)
