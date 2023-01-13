@@ -29,7 +29,7 @@ def get_data():
         cur = conn.cursor()
 
         # commands
-        query = "SELECT city, airportLat, airportLong, centerLat, centerLong FROM lyftfares;"
+        query = "SELECT city, airportLat, airportLong, centerLat, centerLong FROM cities;"
         cur.execute(query)
 
         results = cur.fetchall()
@@ -45,10 +45,10 @@ def get_data():
     output = {}
     for row in results:
         output[row[0]] = {
-            'airport-lat': row[1],
-            'airport-long': row[2],
-            'center-lat': row[3],
-            'center-long': row[4]
+            'airportLat': row[1],
+            'airportLong': row[2],
+            'centerLat': row[3],
+            'centerLong': row[4]
         }
 
     return output
@@ -80,43 +80,35 @@ def find_prices(data):
 
     output = {}
     for (city_name, coords) in data.items():
-        airport_to_center = scrape_coords(coords['airport-lat'], coords['airport-long'],
-                                          coords['center-lat'], coords['center-long'])
-        center_to_airport = scrape_coords(coords['center-lat'], coords['center-long'],
-                                          coords['airport-lat'], coords['airport-long'])
+        airport_to_center = scrape_coords(coords['airportLat'], coords['airportLong'],
+                                          coords['centerLat'], coords['centerLong'])
+        center_to_airport = scrape_coords(coords['centerLat'], coords['centerLong'],
+                                          coords['airportLat'], coords['airportLong'])
 
         output[city_name] = {
-            'airport_to_center': airport_to_center,
-            'center_to_airport': center_to_airport
+            'airporttocenter': airport_to_center,
+            'centertoairport': center_to_airport
         }
     return output
 
 
-def get_db_query(city, city_data, route_data):
+def get_db_query(city, route_data):
     '''Return query to update values in database with values in data'''
     return ("""
         INSERT INTO lyftfares 
         (
             city, 
-            airportlat, 
-            airportlong, 
-            centerlat, 
-            centerlong,
             airporttocenter,
             centertoairport
         )
-        VALUES ('{}',{},{},{},{},{},{});
+        VALUES ('{}',{},{});
         """.format(city,
-                   city_data['airport-lat'],
-                   city_data['airport-long'],
-                   city_data['center-lat'],
-                   city_data['center-long'],
-                   route_data['airport_to_center'],
-                   route_data['center_to_airport']
+                   route_data['airporttocenter'],
+                   route_data['centertoairport']
                    ))
 
 
-def upload(city_data, route_data):
+def upload(route_data):
     '''Upload data generated from find_prices() to PSQL database'''
 
     conn = None
@@ -132,7 +124,7 @@ def upload(city_data, route_data):
         # commands
         for city_name in route_data:
             query = get_db_query(
-                city_name, city_data[city_name], route_data[city_name])
+                city_name, route_data[city_name])
             cur.execute(query)
 
         cur.close()
@@ -147,5 +139,5 @@ def upload(city_data, route_data):
 
 city_data = get_data()
 route_data = find_prices(city_data)
-upload(city_data, route_data)
+upload(route_data)
 driver.close()

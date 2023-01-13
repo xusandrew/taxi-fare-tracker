@@ -12,15 +12,18 @@ const format = text => {
 }
 
 app.get('/citylist/:text', async (req, res) => {
+  /* Get list of cities that names match the input.
+  Empty input returns all cities.*/
+
   try {
     let { text } = req.params
     text = format(text)
 
     let query
     if (text === '-') {
-      query = `SELECT DISTINCT city FROM uberfares ORDER BY city;`
+      query = `SELECT city FROM cities ORDER BY city;`
     } else {
-      query = `SELECT DISTINCT city FROM uberfares WHERE city LIKE '${text}%' ORDER BY city;`
+      query = `SELECT city FROM cities WHERE city LIKE '${text}%' ORDER BY city;`
     }
 
     const data = await pool.query(query)
@@ -31,6 +34,8 @@ app.get('/citylist/:text', async (req, res) => {
 })
 
 app.get('/routes/:city', async (req, res) => {
+  /* Return route data for uber/lyft rides */
+
   try {
     let { city } = req.params
     city = format(city)
@@ -53,6 +58,7 @@ app.get('/routes/:city', async (req, res) => {
 })
 
 app.get('/taxi/:city', async (req, res) => {
+  /* Return route data for taxi rides */
   try {
     let { city } = req.params
     city = format(city)

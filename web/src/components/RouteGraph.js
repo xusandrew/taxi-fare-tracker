@@ -25,6 +25,12 @@ const RouteGraph = props => {
   })
 
   const parse_data = responseData => {
+    responseData['uber'].forEach(e => {
+      e['method'] = 'uber'
+    })
+    responseData['lyft'].forEach(e => {
+      e['method'] = 'lyft'
+    })
     let all_routes = responseData['uber'].concat(responseData['lyft'])
 
     all_routes = all_routes.map(e => {
@@ -35,21 +41,14 @@ const RouteGraph = props => {
     })
 
     const seen = {
-      Uber: [],
-      Lyft: [],
+      uber: [],
+      lyft: [],
     }
 
     all_routes = all_routes.filter(e => {
-      let company
-      if (!e['centerlat']) {
-        company = 'Uber'
-      } else {
-        company = 'Lyft'
-      }
-
-      const duplicate = seen[company].includes(e.time.getTime())
+      const duplicate = seen[e.method].includes(e.time.getTime())
       if (!duplicate) {
-        seen[company].push(e.time.getTime())
+        seen[e.method].push(e.time.getTime())
       }
       return !duplicate
     })
@@ -59,8 +58,8 @@ const RouteGraph = props => {
     })
 
     let seen_times = []
-    seen['Uber'].forEach(e => {
-      if (seen['Lyft'].includes(e)) {
+    seen['uber'].forEach(e => {
+      if (seen['lyft'].includes(e)) {
         seen_times.push(e)
       }
     })
@@ -77,10 +76,10 @@ const RouteGraph = props => {
       return date.getHours().toString() + ':00'
     })
 
-    let uber_data = all_routes.filter(e => e.airport)
+    let uber_data = all_routes.filter(e => e.method === 'uber')
     uber_data = uber_data.map(e => e[props.table_name])
 
-    let lyft_data = all_routes.filter(e => e.airportlat)
+    let lyft_data = all_routes.filter(e => e.method === 'lyft')
     lyft_data = lyft_data.map(e => e[props.table_name])
 
     setData({

@@ -30,7 +30,7 @@ def get_data():
         cur = conn.cursor()
 
         # commands
-        query = "SELECT city, airport, center FROM uberfares;"
+        query = "SELECT city, airport, center FROM cities;"
         cur.execute(query)
 
         results = cur.fetchall()
@@ -92,34 +92,30 @@ def find_prices(data):
         center_to_airport = scrape_links(links['center'], links['airport'])
 
         output[city_name] = {
-            'airport_to_center': airport_to_center,
-            'center_to_airport': center_to_airport
+            'airporttocenter': airport_to_center,
+            'centertoairport': center_to_airport
         }
     return output
 
 
-def get_db_query(city, city_data, route_data):
+def get_db_query(city, route_data):
     '''Return query to update values in database with values in data'''
 
     return ("""
         INSERT INTO uberfares
         (
             city,
-            airport,
-            center,
             airporttocenter,
             centertoairport
         )
-        VALUES ('{}','{}','{}',{},{});
+        VALUES ('{}',{},{});
         """.format(city,
-                   city_data['airport'],
-                   city_data['center'],
-                   route_data['airport_to_center'],
-                   route_data['center_to_airport']
+                   route_data['airporttocenter'],
+                   route_data['centertoairport']
                    ))
 
 
-def upload(city_data, route_data):
+def upload(route_data):
     '''Upload data generated from find_prices() to PSQL database'''
 
     conn = None
@@ -135,7 +131,7 @@ def upload(city_data, route_data):
         # commands
         for city_name in route_data:
             query = get_db_query(
-                city_name, city_data[city_name], route_data[city_name])
+                city_name, route_data[city_name])
             cur.execute(query)
 
         cur.close()
@@ -150,5 +146,5 @@ def upload(city_data, route_data):
 
 city_data = get_data()
 route_data = find_prices(city_data)
-upload(city_data, route_data)
+upload(route_data)
 driver.close()
