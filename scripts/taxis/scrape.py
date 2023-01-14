@@ -68,7 +68,7 @@ def upload(countries):
         # connect to the PostgreSQL server
         print("Connecting to server")
         conn = psycopg2.connect(
-            database="taxifaretracker", user="andrew", password="")
+            database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
         print("Connected")
 
         cur = conn.cursor()
