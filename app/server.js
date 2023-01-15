@@ -77,6 +77,17 @@ app.get('/taxi/:city', async (req, res) => {
   }
 })
 
+app.get('/', async (req, res) => {
+  try {
+    let data = await pool.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema='public';"
+    )
+    res.json(data)
+  } catch (err) {
+    console.error(err)
+  }
+})
+
 app.listen(5000, () => {
   console.log('Server has started on port 5000')
 })

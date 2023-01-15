@@ -31,10 +31,11 @@ const RouteGraph = props => {
     responseData['lyft'].forEach(e => {
       e['method'] = 'lyft'
     })
+
     let all_routes = responseData['uber'].concat(responseData['lyft'])
 
     all_routes = all_routes.map(e => {
-      e.time = e.time.slice(0, -11)
+      e.time = e.date.slice(0, -11)
       e.time += ':00:00'
       e.time = new Date(e.time)
       return e
@@ -70,6 +71,10 @@ const RouteGraph = props => {
       }
       return true
     })
+
+    if (all_routes.length > 24) {
+      all_routes = all_routes.slice(-24)
+    }
 
     const labels = seen_times.map(e => {
       let date = new Date(e)

@@ -1,0 +1,5 @@
+@reboot sleep 5 && /usr/bin/python3 /usr/src/app/init.py >> /var/log/cron.log 2>&1
+
+@hourly sleep 60 && /usr/bin/python3 /usr/src/app/lyft/lyft.py >> /var/log/cron.log 2>&1
+@hourly sleep 60 && /usr/bin/python3 /usr/src/app/uber/uber.py >> /var/log/cron.log 2>&1
+@daily sleep 60 && /usr/bin/python3 /usr/src/app/taxis/scrape.py >> /var/log/cron.log 2>&1
