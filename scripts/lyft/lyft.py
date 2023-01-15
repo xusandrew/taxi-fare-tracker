@@ -21,10 +21,10 @@ def get_data():
     conn = None
     try:
         # connect to the PostgreSQL server
-        print("Connecting to server")
+        print("Lyft: Connecting")
         conn = psycopg2.connect(
             database="taxifaretracker", user="andrew", password="")
-        print("Connected")
+        print("Lyft: Connected")
 
         cur = conn.cursor()
 
@@ -40,7 +40,7 @@ def get_data():
     finally:
         if conn is not None:
             conn.close()
-            print('DB Conn closed')
+            print('Lyft: DB Conn closed')
 
     output = {}
     for row in results:
@@ -114,10 +114,10 @@ def upload(route_data):
     conn = None
     try:
         # connect to the PostgreSQL server
-        print("Connecting to server")
+        print("Lyft: Connecting")
         conn = psycopg2.connect(
             database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
-        print("Connected")
+        print("Lyft: Connected")
 
         cur = conn.cursor()
 
@@ -134,10 +134,11 @@ def upload(route_data):
     finally:
         if conn is not None:
             conn.close()
-            print('DB Conn closed')
+            print('Lyft: DB Conn closed')
 
 
 city_data = get_data()
 route_data = find_prices(city_data)
 upload(route_data)
 driver.close()
+print("Lyft: Finished")

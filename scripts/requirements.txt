@@ -1,5 +1,5 @@
-psycopg2
-selenium
-webdriver_manager
-requests
-bs4
+psycopg2-binary==2.9.5
+selenium==4.7.2
+webdriver-manager==3.8.5
+requests==2.28.1
+beautifulsoup4==4.11.1

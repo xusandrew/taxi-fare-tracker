@@ -66,10 +66,10 @@ def upload(countries):
     conn = None
     try:
         # connect to the PostgreSQL server
-        print("Connecting to server")
+        print("Taxis: Connecting")
         conn = psycopg2.connect(
             database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
-        print("Connected")
+        print("Taxis: Connected")
 
         cur = conn.cursor()
 
@@ -96,15 +96,12 @@ def upload(countries):
     finally:
         if conn is not None:
             conn.close()
-            print('DB Conn closed')
+            print('Taxis: DB Conn closed')
 
 
 countries = scrape_countries()
-print("Scraped country data")
 
 for country in countries:
     scrape_cities(country)
-    print("Scraped cities from " + country.name)
-print("Scraped all data")
-
-upload(countries)
+print("Taxis: Scraped all data")
+print("Taxis: Finished")
