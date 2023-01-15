@@ -20,7 +20,7 @@ def init():
         city VARCHAR(50) NOT NULL,
         airportToCenter NUMERIC(10, 2) NOT NULL,
         centerToAirport NUMERIC(10, 2) NOT NULL,
-        date TIMESTAMPTZ
+        date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE IF NOT EXISTS lyftfares 
@@ -29,7 +29,7 @@ def init():
         city VARCHAR(50) NOT NULL,
         airportToCenter NUMERIC(10, 2) NOT NULL,
         centerToAirport NUMERIC(10, 2) NOT NULL,
-        date TIMESTAMPTZ
+        date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE IF NOT EXISTS taxifares 
@@ -38,7 +38,7 @@ def init():
         city VARCHAR(50) NOT NULL,
         taxistart NUMERIC(10, 2) NOT NULL,
         taxiperkm NUMERIC(10, 2) NOT NULL,
-        date TIMESTAMPTZ
+        date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE IF NOT EXISTS cities 
@@ -53,6 +53,31 @@ def init():
         airportLong NUMERIC(15,10) NOT NULL,
         centerLat NUMERIC(15,10) NOT NULL,
         centerLong NUMERIC(15,10) NOT NULL
+        );
+        
+        INSERT INTO cities
+        (
+        country,
+        city,
+        currency,
+        airport,
+        center,
+        airportLat,
+        airportLong,
+        centerLat,
+        centerLong
+        )
+        VALUES
+        (
+        'Canada',
+        'Toronto',
+        '$ CAD',
+        'YYZ',
+        'Toronto, Ontario, Canada',
+        43.6884422300,
+        -79.6217575000,
+        43.6479301400,
+        -79.3847808800
         );''')
 
         cur.close()

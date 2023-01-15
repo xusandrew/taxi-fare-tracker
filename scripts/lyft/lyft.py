@@ -1,17 +1,24 @@
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium import webdriver
+
 import psycopg2
 
 # start up selenium
-options = Options()
-options.headless = True
-driver = webdriver.Chrome(service=ChromeService(
-    ChromeDriverManager().install()), options=options)
+options = webdriver.ChromeOptions()
+options.add_argument('--no-sandbox')
+options.add_argument('--window-size=1920,1080')
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+options.add_argument('--ignore-ssl-errors=yes')
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--disable-blink-features=AutomationControlled')
+options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Remote(
+    command_executor='http://selenium:4444',
+    options=options
+)
 
 
 def get_data():
@@ -23,7 +30,7 @@ def get_data():
         # connect to the PostgreSQL server
         print("Lyft: Connecting")
         conn = psycopg2.connect(
-            database="taxifaretracker", user="andrew", password="")
+            database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
         print("Lyft: Connected")
 
         cur = conn.cursor()
@@ -63,7 +70,7 @@ def scrape_coords(o_lat, o_long, d_lat, d_long):
     url = f'https://ride.lyft.com/ridetype?origin={o_lat}%2C{o_long}&destination={d_lat}%2C{d_long}&ride_type=&offerProductId=standard'
     driver.get(url)
 
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 30)
     prices = wait.until(EC.visibility_of_all_elements_located(
         (By.CLASS_NAME, 'vbjul')))
 
@@ -95,9 +102,9 @@ def find_prices(data):
 def get_db_query(city, route_data):
     '''Return query to update values in database with values in data'''
     return ("""
-        INSERT INTO lyftfares 
+        INSERT INTO lyftfares
         (
-            city, 
+            city,
             airporttocenter,
             centertoairport
         )
@@ -141,4 +148,5 @@ city_data = get_data()
 route_data = find_prices(city_data)
 upload(route_data)
 driver.close()
+driver.quit()
 print("Lyft: Finished")

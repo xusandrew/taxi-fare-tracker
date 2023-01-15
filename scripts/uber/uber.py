@@ -1,18 +1,24 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 import psycopg2
 
 # start up selenium
-options = Options()
-options.headless = True
-driver = webdriver.Chrome(service=ChromeService(
-    ChromeDriverManager().install()), options=options)
+options = webdriver.ChromeOptions()
+options.add_argument('--no-sandbox')
+options.add_argument('--window-size=1920,1080')
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+options.add_argument('--ignore-ssl-errors=yes')
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--disable-blink-features=AutomationControlled')
+options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Remote(
+    command_executor='http://selenium:4444',
+    options=options
+)
 
 
 def get_data():
@@ -66,7 +72,7 @@ def scrape_links(first, second):
     button = driver.find_element(By.ID, 'get-fare-button')
     button.click()
 
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 30)
     results = wait.until(EC.visibility_of_all_elements_located(
         (By.CSS_SELECTOR, '.text-right strong')))
 
@@ -123,7 +129,7 @@ def upload(route_data):
         # connect to the PostgreSQL server
         print("Uber: Connecting")
         conn = psycopg2.connect(
-            database="taxifaretracker", user="andrew", password="")
+            database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
         print("Uber: Connected")
 
         cur = conn.cursor()
@@ -148,4 +154,5 @@ city_data = get_data()
 route_data = find_prices(city_data)
 upload(route_data)
 driver.close()
+driver.quit()
 print("Uber: Finished")

@@ -46,8 +46,15 @@ services:
     build: ./scripts
     restart: always
     depends_on:
-      - postgres
+      # - postgres
+      - selenium
 
+  selenium:
+    image: seleniarm/standalone-chromium
+    ports:
+      - 4444:4444
+    restart: always
+    platform: linux/arm64
   adminer:
     image: adminer
     restart: always

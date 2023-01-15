@@ -103,5 +103,6 @@ countries = scrape_countries()
 
 for country in countries:
     scrape_cities(country)
+upload(countries)
 print("Taxis: Scraped all data")
 print("Taxis: Finished")
