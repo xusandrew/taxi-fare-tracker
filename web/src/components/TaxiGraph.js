@@ -18,7 +18,7 @@ const TaxiGraph = props => {
 
   const parse_data = response_data => {
     response_data = response_data.map(e => {
-      e.time = e.time.slice(0, -14)
+      e.time = e.date.slice(0, -14)
       e.time += 'T00:00:00'
       e.time = new Date(e.time)
       return e
@@ -30,6 +30,10 @@ const TaxiGraph = props => {
       seen_times.push(e.time.getTime())
       return !duplicate
     })
+
+    if (response_data.length > 10) {
+      response_data = response_data.slice(-10)
+    }
 
     const labels = response_data.map(e => {
       return e.time.toDateString().slice(4)
@@ -61,7 +65,7 @@ const TaxiGraph = props => {
     const fetch_url = `http://localhost:5000/taxi/${props.city}`
     let response = await fetch(fetch_url)
     response = await response.json()
-    parse_data(response, props.table_name)
+    parse_data(response)
   }
 
   useEffect(() => {
