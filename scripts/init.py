@@ -54,6 +54,8 @@ def init():
         centerLat NUMERIC(15,10) NOT NULL,
         centerLong NUMERIC(15,10) NOT NULL
         );
+
+        DELETE FROM cities;
         
         INSERT INTO cities
         (
@@ -78,7 +80,59 @@ def init():
         -79.6217575000,
         43.6479301400,
         -79.3847808800
-        );''')
+        );
+        
+        INSERT INTO cities
+        (
+        country,
+        city,
+        currency,
+        airport,
+        center,
+        airportLat,
+        airportLong,
+        centerLat,
+        centerLong
+        )
+        VALUES
+        (
+        'Canada',
+        'Brampton',
+        '$ CAD',
+        'YYZ',
+        'Brampton',
+        43.688442230,
+        -79.62175750,
+        43.68432235,
+        -79.7595596
+        );
+
+        INSERT INTO cities
+        (
+        country,
+        city,
+        currency,
+        airport,
+        center,
+        airportLat,
+        airportLong,
+        centerLat,
+        centerLong
+        )
+        VALUES
+        (
+        'Canada',
+        'Vancouver',
+        '$ CAD',
+        'YVR',
+        'Vancouver',
+        49.193506,
+        -123.180405,
+        49.256538,
+        -123.101997
+        );
+        
+        ''')
 
         cur.close()
         conn.commit()

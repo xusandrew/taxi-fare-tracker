@@ -11,20 +11,10 @@ const format = text => {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
-app.get('/citylist/:text', async (req, res) => {
-  /* Get list of cities that names match the input.
-  Empty input returns all cities.*/
-
+app.get('/citylist', async (req, res) => {
+  /* Get list of cities that are in the database */
   try {
-    let { text } = req.params
-    text = format(text)
-
-    let query
-    if (text === '-') {
-      query = `SELECT city FROM cities ORDER BY city;`
-    } else {
-      query = `SELECT city FROM cities WHERE city LIKE '${text}%' ORDER BY city;`
-    }
+    let query = `SELECT city FROM cities ORDER BY city;`
 
     const data = await pool.query(query)
     res.json(data.rows)

@@ -62,7 +62,7 @@ const RouteTable = props => {
   useEffect(() => {
     get_data(props.city)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [props.city])
 
   if (showTable) {
     return (
@@ -90,7 +90,9 @@ const RouteTable = props => {
           <table>
             <thead>
               <tr>
-                <th style={{ color: 'white' }}>You found me!</th>
+                <th colSpan='5' style={{ color: 'white' }}>
+                  You found me!
+                </th>
               </tr>
             </thead>
             <tbody>
