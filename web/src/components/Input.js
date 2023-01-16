@@ -3,11 +3,9 @@ import React, { useState, useEffect } from 'react'
 const Input = props => {
   const [cityChoices, setCityChoices] = useState([])
 
-  const searchCitys = async city_val => {
+  const searchCitys = async () => {
     try {
-      if (!city_val) city_val = '-'
-
-      let fetch_url = `http://localhost:5000/citylist/${city_val}`
+      let fetch_url = 'http://localhost:5000/citylist'
 
       let response = await fetch(fetch_url)
       response = await response.json()
@@ -41,7 +39,6 @@ const Input = props => {
             value={props.value}
             onChange={e => {
               props.onChange(e.target.value)
-              searchCitys(e.target.value)
             }}
             className='col-6'
             placeholder='City'

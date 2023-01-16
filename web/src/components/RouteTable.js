@@ -62,7 +62,7 @@ const RouteTable = props => {
   useEffect(() => {
     get_data(props.city)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [props.city])
 
   if (showTable) {
     return (

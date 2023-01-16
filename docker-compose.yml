@@ -56,7 +56,7 @@ services:
     restart: always
     platform: linux/arm64
     environment:
-      - SE_NODE_SESSION_TIMEOUT=100000000
+      - SE_NODE_SESSION_TIMEOUT=2147483647
       - SE_NODE_MAX_SESSIONS=2
 
   adminer:
