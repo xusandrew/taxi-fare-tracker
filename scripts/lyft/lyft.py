@@ -30,7 +30,11 @@ def get_data():
         # connect to the PostgreSQL server
         print("Lyft: Connecting")
         conn = psycopg2.connect(
-            database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
+            database="postgres",
+            user="postgres",
+            password="postgres",
+            host="faredata.c1rgmh92t4a4.us-east-1.rds.amazonaws.com",
+            port="5432")
         print("Lyft: Connected")
 
         cur = conn.cursor()
@@ -123,7 +127,11 @@ def upload(route_data):
         # connect to the PostgreSQL server
         print("Lyft: Connecting")
         conn = psycopg2.connect(
-            database="postgres", user="postgres", password="postgres", host="postgres", port="5432")
+            database="postgres",
+            user="postgres",
+            password="postgres",
+            host="faredata.c1rgmh92t4a4.us-east-1.rds.amazonaws.com",
+            port="5432")
         print("Lyft: Connected")
 
         cur = conn.cursor()
