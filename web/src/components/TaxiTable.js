@@ -9,7 +9,9 @@ const TaxiTable = props => {
   const [tableNum, setTableNum] = useState(0)
 
   const get_data = async city => {
-    let data = await fetch(`http://localhost:5000/taxi/${city}`)
+    let data = await fetch(
+      `https://jydqtzjtpn.us-east-1.awsapprunner.com/taxi/${city}`
+    )
     data = await data.json()
 
     setTaxiStart(parseFloat(data[data.length - 1]['taxistart']))

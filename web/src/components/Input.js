@@ -5,7 +5,7 @@ const Input = props => {
 
   const searchCitys = async () => {
     try {
-      let fetch_url = 'http://localhost:5000/citylist'
+      let fetch_url = 'https://jydqtzjtpn.us-east-1.awsapprunner.com/citylist'
 
       let response = await fetch(fetch_url)
       response = await response.json()

@@ -16,7 +16,9 @@ function App() {
   const onSubmitCity = async e => {
     e.preventDefault()
     try {
-      let cities = await fetch(`http://localhost:5000/citylist`)
+      let cities = await fetch(
+        `https://jydqtzjtpn.us-east-1.awsapprunner.com/citylist`
+      )
       cities = await cities.json()
       cities = cities.map(row => row.city)
 

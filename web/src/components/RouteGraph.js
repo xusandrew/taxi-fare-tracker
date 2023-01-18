@@ -111,7 +111,7 @@ const RouteGraph = props => {
   }
 
   const getData = async () => {
-    const fetch_url = `http://localhost:5000/routes/${props.city}`
+    const fetch_url = `https://jydqtzjtpn.us-east-1.awsapprunner.com/routes/${props.city}`
     let response = await fetch(fetch_url)
     response = await response.json()
     parse_data(response, props.table_name)

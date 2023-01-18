@@ -16,7 +16,9 @@ app.get('/citylist', async (req, res) => {
   try {
     let query = `SELECT city FROM cities ORDER BY city;`
 
+    console.log('Getting Data')
     const data = await pool.query(query)
+    console.log('Got Data')
     res.json(data.rows)
   } catch (err) {
     console.error(err.message)
@@ -69,10 +71,7 @@ app.get('/taxi/:city', async (req, res) => {
 
 app.get('/', async (req, res) => {
   try {
-    let data = await pool.query(
-      "SELECT table_name FROM information_schema.tables WHERE table_schema='public';"
-    )
-    res.json(data)
+    res.send('Hello!')
   } catch (err) {
     console.error(err)
   }

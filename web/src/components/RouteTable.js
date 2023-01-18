@@ -16,7 +16,9 @@ const RouteTable = props => {
   const [tableName, setTableName] = useState('')
 
   const get_data = async city => {
-    let data = await fetch(`http://localhost:5000/routes/${city}`)
+    let data = await fetch(
+      `https://jydqtzjtpn.us-east-1.awsapprunner.com/routes/${city}`
+    )
     data = await data.json()
 
     let uber_data = data.uber[data.uber.length - 1]
